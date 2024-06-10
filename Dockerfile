@@ -9,6 +9,9 @@ COPY . .
 
 # Add execute permissions to the Maven wrapper
 RUN chmod +x ./mvnw
+RUN ./mvnw clean install -U
 
 # Set the entrypoint to use the Maven wrapper to run the Spring Boot application
+EXPOSE 4000
+
 ENTRYPOINT ["./mvnw", "spring-boot:run"]
