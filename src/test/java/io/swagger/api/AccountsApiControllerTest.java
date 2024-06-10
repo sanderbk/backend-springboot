@@ -75,6 +75,8 @@ class AccountsApiControllerTest {
         frank.setId(UUID.fromString(frankid));
         frank.setActive(true);
         frank.setUsername("frankenstein");
+        frank.setFirstname("Frank");
+        frank.setLastname("Sergeant");
         frank.setPassword("welkom");
         frank.setEmail("frank@frank.nl");
         frank.setPhone("+316 112345678");
@@ -88,6 +90,7 @@ class AccountsApiControllerTest {
         franksAccount.setIban("NL01INHO0000400001");
         franksAccount.setAccountType(AccountType.CURRENT);
         franksAccount.setPincode(1234);
+        franksAccount.setActive(true);
 
         accountList.add(franksAccount);
 
@@ -95,6 +98,8 @@ class AccountsApiControllerTest {
         User wim = new User();
         wim.setActive(true);
         wim.setUsername("wimmelstein");
+        wim.setFirstname("Wim");
+        wim.setLastname("De Man");
         wim.setPassword("welkom");
         wim.setEmail("wim@wim.nl");
         wim.setPhone("+316 512345678");
