@@ -58,6 +58,17 @@ public class AccountService {
         return accountList;
     }
 
+    //find an accountlist by using the userid/owner id
+    public List<Account> findAccountsByUsername(String username) {
+        List<Account> accountList = accountRepo.findAccountsByUser_Username(username);
+
+        if (accountList.isEmpty()) {
+            throw new IllegalArgumentException("Something went wrong trying to find accounts with userid: " + username);
+        }
+        return accountList;
+    }
+
+
     //update an account with newly inserted account
     public Account updateAccount(Account a) {
         return Optional.of(accountRepo.save(a)).orElseThrow(

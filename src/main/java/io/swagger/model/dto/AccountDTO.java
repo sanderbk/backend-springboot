@@ -8,7 +8,6 @@ import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.Objects;
-import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -17,7 +16,6 @@ import java.util.UUID;
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-05-18T15:53:51.610Z[GMT]")
 
-
 public class AccountDTO   {
   @JsonProperty("iban")
   private String iban = null;
@@ -25,6 +23,10 @@ public class AccountDTO   {
   @JsonProperty("pinCode")
   private Integer pinCode = null;
 
+  public AccountDTO ownerName(String ownerName) {
+    this.ownerName = ownerName;
+    return this;
+  }
 
   @JsonProperty("accountType")
   private AccountType accountType = null;
@@ -46,7 +48,8 @@ public class AccountDTO   {
   @JsonProperty("absLimit")
   private Double absLimit = null;
 
-
+  @JsonProperty("OwnerName")
+  private String ownerName = null;
 
   @JsonProperty("active")
   private Boolean active = null;
@@ -108,8 +111,17 @@ public class AccountDTO   {
     return ownerId;
   }
 
+  @Valid
+  public String getOwnerName() {
+    return ownerName;
+  }
+
   public void setOwnerId(UUID ownerId) {
     this.ownerId = ownerId;
+  }
+
+  public void setOwnerName(String ownerName) {
+    this.ownerName = ownerName;
   }
 
   public AccountDTO balance(Double balance) {

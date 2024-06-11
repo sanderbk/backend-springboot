@@ -22,7 +22,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -77,6 +76,7 @@ public class AccountsApiController implements AccountsApi {
     @PreAuthorize("hasAnyRole('EMPLOYEE', 'CUSTOMER')")
     public ResponseEntity<List<AccountDTO>> getAccountsByOwnerID(@Parameter(in = ParameterIn.PATH, description = "User ID input", required = true, schema = @Schema()) @PathVariable("userID") UUID userID) {
         List<Account> accountList = accountService.findAccountsByUserId(userID);
+
         List<AccountDTO> responseDto = accountList
                 .stream()
                 .map(user -> modelMapper.map(user, AccountDTO.class))
@@ -84,6 +84,22 @@ public class AccountsApiController implements AccountsApi {
 
         for (int i = 0; i < responseDto.size(); i++) {
             responseDto.get(i).setOwnerId(accountList.get(i).getUser().getId());
+        }
+
+        return new ResponseEntity<List<AccountDTO>>(responseDto, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAnyRole('EMPLOYEE', 'CUSTOMER')")
+    public ResponseEntity<List<AccountDTO>> getAccountsByUsername(@Parameter(in = ParameterIn.PATH, description = "UserName input", required = true, schema = @Schema()) @PathVariable("username") String username) {
+        List<Account> accountList = accountService.findAccountsByUsername(username);
+
+        List<AccountDTO> responseDto = accountList
+                .stream()
+                .map(user -> modelMapper.map(user, AccountDTO.class))
+                .collect(Collectors.toList());
+
+        for (int i = 0; i < responseDto.size(); i++) {
+            responseDto.get(i).setOwnerName(accountList.get(i).getUser().getUsername());
         }
 
         return new ResponseEntity<List<AccountDTO>>(responseDto, HttpStatus.OK);
@@ -122,6 +138,7 @@ public class AccountsApiController implements AccountsApi {
                 .map(account -> {
                     AccountDTO dto = modelMapper.map(account, AccountDTO.class);
                     dto.setOwnerId(account.getUser().getId());
+                    dto.setOwnerName(account.getUser().getUsername());
                     return dto;
                 })
                 .collect(Collectors.toList());

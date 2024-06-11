@@ -17,4 +17,9 @@ public interface AccountRepo extends JpaRepository<Account, UUID> {
     Optional<Account> findAccountByIban(String iban);
 
     List<Account> findAccountsByUserId(UUID userid);
+
+    List<Account> findAccountsByUser_Username(String username);
+
+//    @Query("SELECT a FROM Account a WHERE a.user.username = :username")
+//    List<Account> findAccountsByUserUsername(@Param("username") String username);
 }

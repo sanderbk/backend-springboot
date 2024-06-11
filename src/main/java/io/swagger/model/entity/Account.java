@@ -18,6 +18,7 @@ public class Account {
 
     private AccountType accountType;
 
+
     private Double balance;
     private Double absLimit;
     private Boolean active;

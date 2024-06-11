@@ -46,7 +46,6 @@ public class CustomApplicationRunner implements ApplicationRunner {
         bankAccount.setAccountType(AccountType.CURRENT);
         bankAccount.setActive(true);
 
-
         //init wim and his account
         User wim = new User();
         wim.setActive(true);
@@ -64,6 +63,7 @@ public class CustomApplicationRunner implements ApplicationRunner {
         wimsAccount.setIban("NL01INHO0200000001");
         wimsAccount.setAccountType(AccountType.CURRENT);
         wimsAccount.setPincode(1234);
+        wimsAccount.setActive(true);
 
         User frank = new User();
         String frankid = "c18044a9-0b40-42e6-b079-cac2543602a7";
@@ -82,9 +82,8 @@ public class CustomApplicationRunner implements ApplicationRunner {
         franksAccount.setAbsLimit(-100.00);
         franksAccount.setBalance(300.00);
         franksAccount.setIban("NL01INHO0000400001");
+        franksAccount.setActive(true);
         franksAccount.setAccountType(AccountType.CURRENT);
-
-
 
         userService.addUser(wim);
         userService.addUser(frank);

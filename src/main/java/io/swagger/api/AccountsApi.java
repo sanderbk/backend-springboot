@@ -90,4 +90,16 @@ public interface AccountsApi {
             method = RequestMethod.PUT)
     ResponseEntity<AccountDTO> updateAccount(@Parameter(in = ParameterIn.PATH, description = "IBAN input", required=true, schema=@Schema()) @PathVariable("iban") String iban, @Parameter(in = ParameterIn.DEFAULT, description = "Updated account object", required=true, schema=@Schema()) @Valid @RequestBody AccountDTO body);
 
+    @Operation(summary = "Search an account list on username", description = "", security = {
+            @SecurityRequirement(name = "bearerAuth")    }, tags={ "Employee", "Customer" })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Accounts found", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = AccountDTO.class)))),
+
+            @ApiResponse(responseCode = "404", description = "Accounts not found") })
+    @RequestMapping(value = "/accounts/getByUsername/{username}",
+            produces = { "application/json" },
+            method = RequestMethod.GET)
+
+    ResponseEntity<List<AccountDTO>> getAccountsByUsername(@Parameter(in = ParameterIn.PATH, description = "User Name input", required=true, schema=@Schema()) @PathVariable("username") String username);
+
 }
