@@ -7,8 +7,6 @@ import lombok.ToString;
 import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
-import java.util.UUID;
 
 @Entity
 @Data
@@ -31,6 +29,7 @@ public class Account {
     public void setUser(User user) {
         this.user = user;
     }
+
     public void setActive(Boolean active) {
         this.active = Objects.requireNonNullElse(active, true);
     }
@@ -47,9 +46,5 @@ public class Account {
     @ToString.Exclude
     @OneToMany(mappedBy = "from")
     private List<Transaction> transactions;
-
-
-
-
 
 }

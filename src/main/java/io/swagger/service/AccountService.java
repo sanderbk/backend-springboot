@@ -5,7 +5,6 @@ import io.swagger.repo.AccountRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,6 +24,12 @@ public class AccountService {
     public Account addAccount(Account a) {
         validateAccount(a);
 
+        // Check if the IBAN already exists
+        if (accountRepo.findAccountByIban(a.getIban()).isPresent()) {
+            throw new IllegalArgumentException("An account with this IBAN already exists.");
+        }
+
+        // Generate a new IBAN if it doesn't exist
         if (!accountIbanService.isIbanPresent(a.getIban())) {
             String iban = accountIbanService.generateIban();
             a.setIban(iban);
