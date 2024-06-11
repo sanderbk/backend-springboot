@@ -23,11 +23,6 @@ public class AccountDTO   {
   @JsonProperty("pinCode")
   private Integer pinCode = null;
 
-  public AccountDTO ownerName(String ownerName) {
-    this.ownerName = ownerName;
-    return this;
-  }
-
   @JsonProperty("accountType")
   private AccountType accountType = null;
 
@@ -48,8 +43,8 @@ public class AccountDTO   {
   @JsonProperty("absLimit")
   private Double absLimit = null;
 
-  @JsonProperty("OwnerName")
-  private String ownerName = null;
+  @JsonProperty("username")
+  private String username = null;
 
   @JsonProperty("active")
   private Boolean active = null;
@@ -78,7 +73,6 @@ public class AccountDTO   {
     return this;
   }
 
-
   /**
    * Get accountType
    * @return accountType
@@ -95,15 +89,35 @@ public class AccountDTO   {
     this.accountType = accountType;
   }
 
-  public AccountDTO ownerId(UUID ownerId) {
-    this.ownerId = ownerId;
+  /**
+   * Get username
+   * @return username
+   **/
+  @Schema(example = "frankenstein", description = "")
+
+  public AccountDTO username(String username) {
+    this.username = username;
     return this;
+  }
+
+  @Valid
+  public String getUsername() {
+    return username;
+  }
+
+  public void setUsername(String username) {
+    this.username = username;
   }
 
   /**
    * Get ownerId
    * @return ownerId
    **/
+  public AccountDTO ownerId(UUID ownerId) {
+    this.ownerId = ownerId;
+    return this;
+  }
+
   @Schema(example = "d290f1ee-6c54-4b01-90e6-d701748f0851", description = "")
   
     @Valid
@@ -111,17 +125,9 @@ public class AccountDTO   {
     return ownerId;
   }
 
-  @Valid
-  public String getOwnerName() {
-    return ownerName;
-  }
 
   public void setOwnerId(UUID ownerId) {
     this.ownerId = ownerId;
-  }
-
-  public void setOwnerName(String ownerName) {
-    this.ownerName = ownerName;
   }
 
   public AccountDTO balance(Double balance) {
@@ -197,6 +203,7 @@ public class AccountDTO   {
     return Objects.equals(this.iban, accountDTO.iban) &&
         Objects.equals(this.accountType, accountDTO.accountType) &&
         Objects.equals(this.ownerId, accountDTO.ownerId) &&
+        Objects.equals(this.username, accountDTO.username) &&
         Objects.equals(this.balance, accountDTO.balance) &&
         Objects.equals(this.absLimit, accountDTO.absLimit) &&
         Objects.equals(this.active, accountDTO.active);

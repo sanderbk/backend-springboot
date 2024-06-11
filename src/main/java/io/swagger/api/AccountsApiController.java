@@ -99,7 +99,7 @@ public class AccountsApiController implements AccountsApi {
                 .collect(Collectors.toList());
 
         for (int i = 0; i < responseDto.size(); i++) {
-            responseDto.get(i).setOwnerName(accountList.get(i).getUser().getUsername());
+            responseDto.get(i).setUsername(accountList.get(i).getUser().getUsername());
         }
 
         return new ResponseEntity<List<AccountDTO>>(responseDto, HttpStatus.OK);
@@ -138,7 +138,7 @@ public class AccountsApiController implements AccountsApi {
                 .map(account -> {
                     AccountDTO dto = modelMapper.map(account, AccountDTO.class);
                     dto.setOwnerId(account.getUser().getId());
-                    dto.setOwnerName(account.getUser().getUsername());
+                    dto.setUsername(account.getUser().getUsername());
                     return dto;
                 })
                 .collect(Collectors.toList());
