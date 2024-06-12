@@ -52,6 +52,7 @@ public class AccountService {
     //find an accountlist by using the userid/owner id
     public List<Account> findAccountsByUserId(UUID userId) {
         List<Account> accountList = accountRepo.findAccountsByUserId(userId);
+
         if (accountList.isEmpty()) {
             throw new IllegalArgumentException("Something went wrong trying to find accounts with userid: " + userId);
         }

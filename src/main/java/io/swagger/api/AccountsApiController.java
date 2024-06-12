@@ -84,6 +84,7 @@ public class AccountsApiController implements AccountsApi {
 
         for (int i = 0; i < responseDto.size(); i++) {
             responseDto.get(i).setOwnerId(accountList.get(i).getUser().getId());
+            responseDto.get(i).setUsername(accountList.get(i).getUser().getUsername());
         }
 
         return new ResponseEntity<List<AccountDTO>>(responseDto, HttpStatus.OK);
@@ -99,6 +100,7 @@ public class AccountsApiController implements AccountsApi {
                 .collect(Collectors.toList());
 
         for (int i = 0; i < responseDto.size(); i++) {
+            responseDto.get(i).setOwnerId(accountList.get(i).getUser().getId());
             responseDto.get(i).setUsername(accountList.get(i).getUser().getUsername());
         }
 

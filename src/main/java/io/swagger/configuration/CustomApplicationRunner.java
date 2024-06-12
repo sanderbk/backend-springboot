@@ -67,6 +67,8 @@ public class CustomApplicationRunner implements ApplicationRunner {
 
         User frank = new User();
         String frankid = "c18044a9-0b40-42e6-b079-cac2543602a7";
+        frank.setFirstname("Frank");
+        frank.setLastname("EnStein");
         frank.setId(UUID.fromString(frankid));
         frank.setActive(true);
         frank.setUsername("frankenstein");
