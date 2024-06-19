@@ -43,14 +43,14 @@ public class TransactionValidatorService {
 
     public boolean doesNotExceedDayLimit(User user, Transaction transaction) {
         double dailyLimit = user.getDayLimit();
-        LocalDateTime today = LocalDateTime.now();
-        LocalDateTime yesterday = today.minusHours(24);
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime yesterday = now.minusHours(24);
 
-        List<Transaction> transactionsToday = transactionRepo.findAllByUserPerformingAndTimestampBetweenAndAccountTypeCurrent(user.getId(), today, yesterday);
+        List<Transaction> transactions = transactionRepo.findAllByUserPerformingAndTimestampBetweenAndAccountTypeCurrent(user.getId(), yesterday, now);
 
         double totalAmountToday = 0;
-        for (Transaction trans : transactionsToday) {
-            totalAmountToday += trans.getAmount();
+        for (Transaction t : transactions) {
+            totalAmountToday += t.getAmount();
         }
 
         return (totalAmountToday + transaction.getAmount()) <= dailyLimit;

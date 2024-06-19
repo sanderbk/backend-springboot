@@ -60,13 +60,13 @@ public class TransactionsApiController implements TransactionsApi {
     }
 
     @PreAuthorize("hasAnyRole('EMPLOYEE', 'CUSTOMER')")
-    public ResponseEntity<TransactionDTO> createTransaction(@Parameter(in = ParameterIn.DEFAULT, description = "New transaction object", required=true, schema=@Schema()) @Valid @RequestBody TransactionDTO body) {
+    public ResponseEntity<TransactionDTO> createTransaction(@Parameter(in = ParameterIn.DEFAULT, description = "New transaction object", required = true, schema = @Schema()) @Valid @RequestBody TransactionDTO body) {
         try {
             Transaction trans = modelMapper.map(body, Transaction.class);
             trans.setId(UUID.randomUUID());
             trans.setFrom(accountService.findAccountByIban(body.getFrom()).orElseThrow());
 
-            switch (trans.getTransactionType()){
+            switch (trans.getTransactionType()) {
                 case REGULAR:
                     trans = transService.createTransaction(trans);
                     break;
@@ -77,6 +77,7 @@ public class TransactionsApiController implements TransactionsApi {
                     trans = transService.createDeposit(trans);
                     break;
             }
+
 
             TransactionDTO response = modelMapper.map(trans, TransactionDTO.class);
             response.setFrom(body.getFrom());
@@ -120,6 +121,4 @@ public class TransactionsApiController implements TransactionsApi {
 
         return ResponseEntity.ok(transactionDTOs);
     }
-
-
 }

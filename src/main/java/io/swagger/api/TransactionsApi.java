@@ -31,42 +31,41 @@ import java.util.List;
 public interface TransactionsApi {
 
     @Operation(summary = "Create a new transaction", description = "", security = {
-        @SecurityRequirement(name = "bearerAuth")    }, tags={ "Employee", "Customer" })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "201", description = "Transaction created", content = @Content(mediaType = "application/json", schema = @Schema(implementation = TransactionDTO.class))),
-        
-        @ApiResponse(responseCode = "400", description = "Invalid transaction") })
+            @SecurityRequirement(name = "bearerAuth")    }, tags={ "Employee", "Customer" })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Transaction created", content = @Content(mediaType = "application/json", schema = @Schema(implementation = TransactionDTO.class))),
+
+            @ApiResponse(responseCode = "400", description = "Invalid transaction") })
     @RequestMapping(value = "/transactions",
-        produces = { "application/json" }, 
-        consumes = { "application/json" }, 
-        method = RequestMethod.POST)
+            produces = { "application/json" },
+            consumes = { "application/json" },
+            method = RequestMethod.POST)
     ResponseEntity<TransactionDTO> createTransaction(@Parameter(in = ParameterIn.DEFAULT, description = "New transaction object", required=true, schema=@Schema()) @Valid @RequestBody TransactionDTO body
-);
+    );
 
 
     @Operation(summary = "Get one transaction on Id", description = "", security = {
-        @SecurityRequirement(name = "bearerAuth")    }, tags={ "Employee", "Customer" })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "Transaction found", content = @Content(mediaType = "application/json", schema = @Schema(implementation = TransactionDTO.class))),
-        
-        @ApiResponse(responseCode = "404", description = "Transaction not found") })
+            @SecurityRequirement(name = "bearerAuth")    }, tags={ "Employee", "Customer" })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Transaction found", content = @Content(mediaType = "application/json", schema = @Schema(implementation = TransactionDTO.class))),
+
+            @ApiResponse(responseCode = "404", description = "Transaction not found") })
     @RequestMapping(value = "/transactions/{id}",
-        produces = { "application/json" }, 
-        method = RequestMethod.GET)
+            produces = { "application/json" },
+            method = RequestMethod.GET)
     ResponseEntity<TransactionDTO> getTransaction(@Parameter(in = ParameterIn.PATH, description = "Transaction ID input", required=true, schema=@Schema()) @PathVariable("id") UUID id
-);
+    );
 
 
     @Operation(summary = "Get all transactions by logged-in user", description = "", security = {
-        @SecurityRequirement(name = "bearerAuth")    }, tags={ "Employee", "Customer" })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "Transactions found", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = TransactionDTO.class)))),
-        
-        @ApiResponse(responseCode = "404", description = "No transactions found") })
+            @SecurityRequirement(name = "bearerAuth")    }, tags={ "Employee", "Customer" })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Transactions found", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = TransactionDTO.class)))),
+
+            @ApiResponse(responseCode = "404", description = "No transactions found") })
     @RequestMapping(value = "/transactions/byUser",
-        produces = { "application/json" }, 
-        method = RequestMethod.GET)
+            produces = { "application/json" },
+            method = RequestMethod.GET)
     ResponseEntity<List<TransactionDTO>> getTransactionsByUser();
 
 }
-

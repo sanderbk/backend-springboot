@@ -1,19 +1,17 @@
 
 q
-java:S10669"/Merge this if statement with the enclosing one.(Íž‘8º§Ô‚ƒ2J$b0c0a5fd-6406-454c-9120-7784c9c3d6a8
+java:S1066;"/Merge this if statement with the enclosing one.(Íž‘8¨¹Åƒƒ2J$bfe15011-d15a-4fec-99a3-1eaf6395ab97
 …
-java:S6813"BRemove this field injection and use constructor injection instead.(êæÄÞ8Æ§Ô‚ƒ2J$cf3a5673-d76d-4cee-bbb6-3f050eed830a
+java:S6813"BRemove this field injection and use constructor injection instead.(êæÄÞ8Í¹Åƒƒ2J$fe04ad79-618f-4cbd-a8d5-cb2edcd50bca
 …
-java:S6813"BRemove this field injection and use constructor injection instead.(êæÄÞ8Æ§Ô‚ƒ2J$fab687a8-fa2f-467f-8035-e0f3960c8fca
+java:S6813"BRemove this field injection and use constructor injection instead.(êæÄÞ8Î¹Åƒƒ2J$a9420d6a-a090-45b1-8a7a-886c19190cab
 …
-java:S6813"BRemove this field injection and use constructor injection instead.(êæÄÞ8Æ§Ô‚ƒ2J$6d89bf52-f4d6-4aa8-a206-2cf7f99e15c6
+java:S6813"BRemove this field injection and use constructor injection instead.(êæÄÞ8Ù¹Åƒƒ2J$5b25ea3d-3f20-4b49-aaaf-50182d4e63ee
 …
-java:S6813"BRemove this field injection and use constructor injection instead.(êæÄÞ8Æ§Ô‚ƒ2J$f63eda15-0a6f-49bb-9f64-d325785d297b
+java:S6813"BRemove this field injection and use constructor injection instead.(êæÄÞ8å¹Åƒƒ2J$b4777597-c677-4a8c-b2b4-2d25f5846cca
 …
-java:S6813"BRemove this field injection and use constructor injection instead.(êæÄÞ8Ç§Ô‚ƒ2J$276b39c2-7a02-4ae8-915c-44018b9667d4
+java:S6813"BRemove this field injection and use constructor injection instead.(êæÄÞ8õ¹Åƒƒ2J$1a8631e7-93d7-48e5-a91c-528943043a3b
 Ÿ
-java:S2159¥"VRemove this call to "equals"; comparisons between unrelated types always return false.(½ì‚¾ùÿÿÿÿ8ù§Ô‚ƒ2J$08ab33fb-18c6-41bd-95ee-0f2407e5cf64
+java:S2159§"VRemove this call to "equals"; comparisons between unrelated types always return false.(½ì‚¾ùÿÿÿÿ8Ç¼Åƒƒ2J$b9765190-7f4f-4c12-88e0-0e9f80d68caf
 Ÿ
-java:S2159¥"VRemove this call to "equals"; comparisons between unrelated types always return false.(½ì‚¾ùÿÿÿÿ8ú§Ô‚ƒ2J$145aec38-71ee-4126-b2e6-21129142eef4
-|
-java:S1128"4Remove this unused import 'java.time.LocalDateTime'.(æÃ§ƒüÿÿÿÿ8äãÔ‚ƒ2J$e78284b0-ba5a-4002-8799-ea80cfa5cbb2
+java:S2159§"VRemove this call to "equals"; comparisons between unrelated types always return false.(½ì‚¾ùÿÿÿÿ8È¼Åƒƒ2J$33c0620b-4565-4aa8-87a4-f3e22092f009
