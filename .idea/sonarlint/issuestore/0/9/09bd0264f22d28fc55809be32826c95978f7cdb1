@@ -1,0 +1,19 @@
+
+q
+java:S10669"/Merge this if statement with the enclosing one.(Íž‘8º§Ô‚ƒ2J$b0c0a5fd-6406-454c-9120-7784c9c3d6a8
+…
+java:S6813"BRemove this field injection and use constructor injection instead.(êæÄÞ8Æ§Ô‚ƒ2J$cf3a5673-d76d-4cee-bbb6-3f050eed830a
+…
+java:S6813"BRemove this field injection and use constructor injection instead.(êæÄÞ8Æ§Ô‚ƒ2J$fab687a8-fa2f-467f-8035-e0f3960c8fca
+…
+java:S6813"BRemove this field injection and use constructor injection instead.(êæÄÞ8Æ§Ô‚ƒ2J$6d89bf52-f4d6-4aa8-a206-2cf7f99e15c6
+…
+java:S6813"BRemove this field injection and use constructor injection instead.(êæÄÞ8Æ§Ô‚ƒ2J$f63eda15-0a6f-49bb-9f64-d325785d297b
+…
+java:S6813"BRemove this field injection and use constructor injection instead.(êæÄÞ8Ç§Ô‚ƒ2J$276b39c2-7a02-4ae8-915c-44018b9667d4
+Ÿ
+java:S2159¥"VRemove this call to "equals"; comparisons between unrelated types always return false.(½ì‚¾ùÿÿÿÿ8ù§Ô‚ƒ2J$08ab33fb-18c6-41bd-95ee-0f2407e5cf64
+Ÿ
+java:S2159¥"VRemove this call to "equals"; comparisons between unrelated types always return false.(½ì‚¾ùÿÿÿÿ8ú§Ô‚ƒ2J$145aec38-71ee-4126-b2e6-21129142eef4
+|
+java:S1128"4Remove this unused import 'java.time.LocalDateTime'.(æÃ§ƒüÿÿÿÿ8äãÔ‚ƒ2J$e78284b0-ba5a-4002-8799-ea80cfa5cbb2
