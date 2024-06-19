@@ -2,6 +2,7 @@ package io.swagger.model.entity;
 
 import io.swagger.model.enumeration.AccountType;
 import io.swagger.model.enumeration.TransactionType;
+import io.swagger.model.enumeration.UserType;
 import lombok.Data;
 import lombok.ToString;
 

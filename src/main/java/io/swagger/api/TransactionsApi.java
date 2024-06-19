@@ -16,6 +16,8 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -67,5 +69,17 @@ public interface TransactionsApi {
             produces = { "application/json" },
             method = RequestMethod.GET)
     ResponseEntity<List<TransactionDTO>> getTransactionsByUser();
+
+    @Operation(summary = "Get all transactions (accessible by employees)", description = "", security = {
+            @SecurityRequirement(name = "bearerAuth")    }, tags={ "Employee" })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Transactions found", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = TransactionDTO.class)))),
+
+            @ApiResponse(responseCode = "404", description = "No transactions found") })
+    @RequestMapping(value = "/transactions/employee",
+            produces = { "application/json" },
+            method = RequestMethod.GET)
+    ResponseEntity<List<TransactionDTO>> getAllTransactionsForEmployees();
+
 
 }

@@ -685,3 +685,17 @@ Q.idea/sonarlint/securityhotspotstore/8/8/88a9255124c95bdc913197c120a8d560edc59c
 Q.idea/sonarlint/securityhotspotstore/8/8/881a6bc128123a06aff4de4b0a7268d5aa159a3a,c\f\cfc488fce51ae0c078e8d606e77f9d7871b08a81
 Å
 Q.idea/sonarlint/securityhotspotstore/8/8/88b1d8bc0e03742ca253b267af2d4d7062465a1d,f\9\f9c3040e73549c7616d3e4f11ecde67eb3437bdd
+_
+/src/main/java/io/swagger/model/entity/User.java,e\f\ef81f0ea53a0acca7913cbc9635ded4987e75438
+[
++src/main/java/io/swagger/repo/UserRepo.java,8\c\8c790ff847fe8355f4cf6f3b105f7b59378ea0ee
+d
+4src/main/java/io/swagger/api/UsersApiController.java,e\3\e3b14d778a47b2787948ed44166ad8943822b1fa
+Z
+*src/main/java/io/swagger/api/UsersApi.java,8\f\8f504b86302d0b006d531fee3de340a4fa1351bc
+a
+1src/main/java/io/swagger/service/UserService.java,5\a\5a037689ce5b6805ff0de144e43750de90c64576
+b
+2src/main/java/io/swagger/model/entity/Account.java,1\f\1fe84150ff8172ae254554858e06a14c0babcdb2
+`
+0src/main/java/io/swagger/model/dto/TokenDTO.java,9\2\92e1ab786ff23ce308606153c6899a5a3b0fef51

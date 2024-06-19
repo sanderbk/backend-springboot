@@ -577,3 +577,17 @@ w
 G.idea/sonarlint/issuestore/1/e/1e77d757393f5bb95d114b05572146e937664603,1\d\1d8eb8ec483e3584bcbdfcd20f1e07e9b13aa20f
 w
 G.idea/sonarlint/issuestore/1/2/1207112449db17369c4b9fdde8a38aa47d7a6928,6\3\63785a63cba1439de77f60710021c8129ff62f90
+_
+/src/main/java/io/swagger/model/entity/User.java,e\f\ef81f0ea53a0acca7913cbc9635ded4987e75438
+[
++src/main/java/io/swagger/repo/UserRepo.java,8\c\8c790ff847fe8355f4cf6f3b105f7b59378ea0ee
+d
+4src/main/java/io/swagger/api/UsersApiController.java,e\3\e3b14d778a47b2787948ed44166ad8943822b1fa
+Z
+*src/main/java/io/swagger/api/UsersApi.java,8\f\8f504b86302d0b006d531fee3de340a4fa1351bc
+a
+1src/main/java/io/swagger/service/UserService.java,5\a\5a037689ce5b6805ff0de144e43750de90c64576
+b
+2src/main/java/io/swagger/model/entity/Account.java,1\f\1fe84150ff8172ae254554858e06a14c0babcdb2
+`
+0src/main/java/io/swagger/model/dto/TokenDTO.java,9\2\92e1ab786ff23ce308606153c6899a5a3b0fef51

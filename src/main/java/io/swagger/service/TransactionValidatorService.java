@@ -46,10 +46,10 @@ public class TransactionValidatorService {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime yesterday = now.minusHours(24);
 
-        List<Transaction> transactions = transactionRepo.findAllByUserPerformingAndTimestampBetweenAndAccountTypeCurrent(user.getId(), yesterday, now);
+        List<Transaction> transactionsToday = transactionRepo.findAllByUserPerformingAndTimestampBetweenAndAccountTypeCurrent(user.getId(), yesterday, now);
 
         double totalAmountToday = 0;
-        for (Transaction t : transactions) {
+        for (Transaction t : transactionsToday) {
             totalAmountToday += t.getAmount();
         }
 

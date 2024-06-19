@@ -97,4 +97,3 @@ public class TransactionDTO {
     return o.toString().replace("\n", "\n    ");
   }
 }
-
