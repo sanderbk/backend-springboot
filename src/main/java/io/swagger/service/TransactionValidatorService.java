@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -43,11 +44,14 @@ public class TransactionValidatorService {
     public boolean doesNotExceedDayLimit(User user, Transaction transaction) {
         double dailyLimit = user.getDayLimit();
         LocalDateTime today = LocalDateTime.now();
+        LocalDateTime yesterday = today.minusHours(24);
 
-        double totalAmountToday = transactionRepo.findAllByUserPerformingAndTimestamp(user.getId(), today)
-                .stream()
-                .mapToDouble(Transaction::getAmount)
-                .sum();
+        List<Transaction> transactionsToday = transactionRepo.findAllByUserPerformingAndTimestampBetweenAndAccountTypeCurrent(user.getId(), today, yesterday);
+
+        double totalAmountToday = 0;
+        for (Transaction trans : transactionsToday) {
+            totalAmountToday += trans.getAmount();
+        }
 
         return (totalAmountToday + transaction.getAmount()) <= dailyLimit;
     }

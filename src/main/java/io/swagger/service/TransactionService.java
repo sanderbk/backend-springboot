@@ -3,11 +3,13 @@ package io.swagger.service;
 import io.swagger.model.entity.Account;
 import io.swagger.model.entity.Transaction;
 import io.swagger.model.entity.User;
+import io.swagger.model.enumeration.AccountType;
 import io.swagger.repo.AccountRepo;
 import io.swagger.repo.TransactionRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -31,21 +33,31 @@ public class TransactionService {
         Account accountFrom = getAccountByIban(trans.getFrom().getIban());
         Account accountTo = getAccountByIban(trans.getTo());
 
+        validateAccounts(accountFrom, accountTo);
+
+        checkGeneralConditions(trans);
+
+        // Only regular transactions have a daily limit
+        if (isRegularTransaction(accountFrom, accountTo)) {
+            checkDailyLimit(trans);
+        }
+
+        trans.setAccountType(determineAccountType(accountFrom, accountTo));
+        updateBalances(accountFrom, accountTo, trans.getAmount());
+
+        return transactionRepo.save(trans);
+    }
+
+    private void validateAccounts(Account accountFrom, Account accountTo) {
         if (transactionValidatorService.areBothAccountsSavings(accountFrom, accountTo)) {
             throw new IllegalArgumentException("Cannot create transaction; Cannot transfer between two savings accounts.");
         }
 
         if (transactionValidatorService.isOneAccountSavings(accountFrom, accountTo)) {
             if (!transactionValidatorService.isUserOwnerOfAccounts(accountFrom, accountTo)) {
-                throw new IllegalArgumentException("Cannot create transaction; Cannot transfer to or from a savings account that does not belong to you.");
+                throw new IllegalArgumentException("Cannot create transaction; Cannot transfer to or from a savings account that is not yours.");
             }
         }
-
-        checkGeneralConditions(trans);
-        updateFromBalance(accountFrom, trans.getAmount());
-        updateToBalance(accountTo, trans.getAmount());
-
-        return transactionRepo.save(trans);
     }
 
     private void checkGeneralConditions(Transaction trans) {
@@ -68,11 +80,22 @@ public class TransactionService {
         if (!transactionValidatorService.hasSufficientFunds(accountFrom, trans.getAmount())) {
             throw new IllegalArgumentException("Cannot create transaction; Cannot exceed absolute limit.");
         }
+    }
 
+    private void checkDailyLimit(Transaction trans) {
         User userPerforming = userService.findById(trans.getUserPerforming());
         if (!transactionValidatorService.doesNotExceedDayLimit(userPerforming, trans)) {
             throw new IllegalArgumentException("Cannot create transaction; Cannot exceed day limit.");
         }
+    }
+
+    private boolean isRegularTransaction(Account accountFrom, Account accountTo) {
+        return !transactionValidatorService.isOneAccountSavings(accountFrom, accountTo);
+    }
+
+    private void updateBalances(Account accountFrom, Account accountTo, double amount) {
+        updateFromBalance(accountFrom, amount);
+        updateToBalance(accountTo, amount);
     }
 
     private void updateToBalance(Account account, double amount) {
@@ -86,9 +109,12 @@ public class TransactionService {
     }
 
     public Transaction createWithdrawal(Transaction trans) {
+        Account accountFrom = getAccountByIban(trans.getFrom().getIban());
+        Account accountTo = getAccountByIban(trans.getTo());
         validatePinCode(trans);
         checkGeneralConditions(trans);
-        Account accountFrom = getAccountByIban(trans.getFrom().getIban());
+        trans.setAccountType(determineAccountType(accountFrom, accountTo));
+        checkDailyLimit(trans);
         updateFromBalance(accountFrom, trans.getAmount());
         return transactionRepo.save(trans);
     }
@@ -133,5 +159,13 @@ public class TransactionService {
 
     private Account getAccountByIban(String iban) {
         return accountService.findAccountByIban(iban).orElseThrow(() -> new NoSuchElementException("Account with the given IBAN not found."));
+    }
+
+    private AccountType determineAccountType(Account accountFrom, Account accountTo) {
+        if (accountFrom.getAccountType().equals("SAVINGS") || accountTo.getAccountType().equals("SAVINGS")) {
+            return AccountType.SAVINGS;
+        } else {
+            return AccountType.CURRENT;
+        }
     }
 }

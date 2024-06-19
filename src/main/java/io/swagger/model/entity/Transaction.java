@@ -1,5 +1,6 @@
 package io.swagger.model.entity;
 
+import io.swagger.model.enumeration.AccountType;
 import io.swagger.model.enumeration.TransactionType;
 import lombok.Data;
 import lombok.ToString;
@@ -36,6 +37,9 @@ public class Transaction {
     private UUID userPerforming;
 
     private Integer pinCode;
+
+    @Enumerated(EnumType.STRING)
+    private AccountType accountType;
 
     public void setAmount(Double amount) {
         if (amount < 0) {
