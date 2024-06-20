@@ -1,17 +1,22 @@
 
 q
-java:S1066>"/Merge this if statement with the enclosing one.(Í‘8˜½©ƒ2J$97f6a64a-e8d6-4c61-9c1a-d485aed262c2
+java:S1066>"/Merge this if statement with the enclosing one.(Í‘8À•Î©ƒ2J$fd387da4-6dca-4b60-bb8b-30fcb74985e3
 …
-java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞ8‘˜½©ƒ2J$8e353edc-91e8-4621-a082-e1f4d15359a8
+java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞ8Ï•Î©ƒ2J$cfa1e159-454a-45bc-bd67-1763c94f06c3
 …
-java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞ8’˜½©ƒ2J$9f42679d-d3a6-4f61-8437-a20231a6ba23
+java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞ8Ï•Î©ƒ2J$b7c105a3-2ceb-4dd5-9538-d5e7c38158bf
 …
-java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞ8“˜½©ƒ2J$5a6203a4-5c86-4e56-9884-5fd3909b359c
+java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞ8Ğ•Î©ƒ2J$22a9909b-61e3-4e94-8c02-e1d22ed5fe43
 …
-java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞ8“˜½©ƒ2J$b104483a-4cba-480f-af5f-a3220cc6907f
+java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞ8Ğ•Î©ƒ2J$c533ce71-3ddc-42af-b149-33b176013b2a
 …
-java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞ8”˜½©ƒ2J$88c511ea-5258-4215-985e-9207a4d41007
+java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞ8Ğ•Î©ƒ2J$372051c9-fccf-4fdd-ae82-8b3ccc06346d
 Ÿ
-java:S2159²"VRemove this call to "equals"; comparisons between unrelated types always return false.(½ì‚¾ùÿÿÿÿ8æš½©ƒ2J$0cb0bb4e-aa60-4350-9718-e8383cb4dd15
+java:S2159²"VRemove this call to "equals"; comparisons between unrelated types always return false.(½ì‚¾ùÿÿÿÿ8“–Î©ƒ2J$3c6c58f1-3508-45ac-845e-40f2df66bd87
 Ÿ
-java:S2159²"VRemove this call to "equals"; comparisons between unrelated types always return false.(½ì‚¾ùÿÿÿÿ8æš½©ƒ2J$b5638aee-dd3b-4cdf-863d-62423ef09658
+java:S2159²"VRemove this call to "equals"; comparisons between unrelated types always return false.(½ì‚¾ùÿÿÿÿ8”–Î©ƒ2J$1cc2131a-a0ea-4060-8b6b-4a22eb1dbd44
+‰
+java:S1128
+"ARemove this unused import 'org.springframework.data.domain.Page'.(˜âüÿÿÿÿ8•–Î©ƒ2J$ad8be5d6-f8bf-49af-82fe-e828219e52e9
+
+java:S1128"ERemove this unused import 'org.springframework.data.domain.Pageable'.(‡ë‚Öıÿÿÿÿ8––Î©ƒ2J$1141ea10-e9ea-4d4b-a4aa-c3d0a832b49f

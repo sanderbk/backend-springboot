@@ -25,13 +25,17 @@ public interface TransactionRepo extends JpaRepository<Transaction, UUID> {
             "   (:amountFilterType = 'equal' AND t.amount = :amount)" +
             "   OR (:amountFilterType = 'greater' AND t.amount > :amount)" +
             "   OR (:amountFilterType = 'less' AND t.amount < :amount)" +
-            "))")
+            " ))" +
+            " AND (:startTime IS NULL OR t.timestamp BETWEEN :startTime AND :endTime)")
     List<Transaction> findFilteredTransactions(
             @Param("userId") UUID userId,
             @Param("fromAccount") String fromAccount,
             @Param("toAccount") String toAccount,
             @Param("amount") Double amount,
-            @Param("amountFilterType") String amountFilterType);
+            @Param("amountFilterType") String amountFilterType,
+            @Param("startTime") LocalDateTime startTime,
+            @Param("endTime") LocalDateTime endTime);
+
 
 
 }

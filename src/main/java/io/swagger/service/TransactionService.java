@@ -143,8 +143,8 @@ public class TransactionService {
         return transactionRepo.findAll();
     }
 
-    public List<Transaction> findFilteredTransactions(UUID userId, String fromAccount, String toAccount, Double amount, String amountFilterType) {
-        return transactionRepo.findFilteredTransactions(userId, fromAccount, toAccount, amount, amountFilterType);
+    public List<Transaction> findFilteredTransactions(UUID userId, String fromAccount, String toAccount, Double amount, String amountFilterType, LocalDateTime startTime, LocalDateTime endTime) {
+        return transactionRepo.findFilteredTransactions(userId, fromAccount, toAccount, amount, amountFilterType, startTime, endTime);
     }
 
     private boolean isPinCodeNull(Integer pinCode) {

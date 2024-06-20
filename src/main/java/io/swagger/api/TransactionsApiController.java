@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -144,7 +145,9 @@ public class TransactionsApiController implements TransactionsApi {
             @RequestParam(value = "fromAccount", required = false) String fromAccount,
             @RequestParam(value = "toAccount", required = false) String toAccount,
             @RequestParam(value = "amount", required = false) Double amount,
-            @RequestParam(value = "amountFilterType", required = false) String amountFilterType) {
+            @RequestParam(value = "amountFilterType", required = false) String amountFilterType,
+            @RequestParam(value = "startTime", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startTime,
+            @RequestParam(value = "endTime", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endTime) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
@@ -155,7 +158,7 @@ public class TransactionsApiController implements TransactionsApi {
 
         UUID userId = user.getId();
 
-        List<Transaction> transactions = transService.findFilteredTransactions(userId, fromAccount, toAccount, amount, amountFilterType);
+        List<Transaction> transactions = transService.findFilteredTransactions(userId, fromAccount, toAccount, amount, amountFilterType, startTime, endTime);
 
         List<TransactionDTO> transactionDTOs = transactions.stream()
                 .map(transaction -> modelMapper.map(transaction, TransactionDTO.class))
