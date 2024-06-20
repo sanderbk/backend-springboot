@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -140,6 +141,10 @@ public class TransactionService {
 
     public List<Transaction> getAllTransactionsForEmployees() {
         return transactionRepo.findAll();
+    }
+
+    public List<Transaction> findFilteredTransactions(UUID userId, String fromAccount, String toAccount, Double amount, String amountFilterType) {
+        return transactionRepo.findFilteredTransactions(userId, fromAccount, toAccount, amount, amountFilterType);
     }
 
     private boolean isPinCodeNull(Integer pinCode) {

@@ -1,22 +1,17 @@
 
 q
-java:S1066="/Merge this if statement with the enclosing one.(Í‘8¨¹Åƒƒ2J$866a9880-5dcf-4e43-ba01-9c0c079c7138
+java:S1066>"/Merge this if statement with the enclosing one.(Í‘8˜½©ƒ2J$97f6a64a-e8d6-4c61-9c1a-d485aed262c2
 …
-java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞ8Í¹Åƒƒ2J$de4fcb34-f1c3-435b-bf85-df15ee603205
+java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞ8‘˜½©ƒ2J$8e353edc-91e8-4621-a082-e1f4d15359a8
 …
-java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞ8Î¹Åƒƒ2J$443fd1c9-a440-458c-97d0-4974dda7f41c
+java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞ8’˜½©ƒ2J$9f42679d-d3a6-4f61-8437-a20231a6ba23
 …
-java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞ8Ù¹Åƒƒ2J$e643652a-3eda-44ff-abdc-d3334b452521
+java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞ8“˜½©ƒ2J$5a6203a4-5c86-4e56-9884-5fd3909b359c
 …
-java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞ8å¹Åƒƒ2J$5325b77d-30c1-4f5c-b1cc-aefec065c9ef
+java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞ8“˜½©ƒ2J$b104483a-4cba-480f-af5f-a3220cc6907f
 …
-java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞ8õ¹Åƒƒ2J$76308cb5-3b6a-4a73-a2d4-2d5de1810897
+java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞ8”˜½©ƒ2J$88c511ea-5258-4215-985e-9207a4d41007
 Ÿ
-java:S2159­"VRemove this call to "equals"; comparisons between unrelated types always return false.(½ì‚¾ùÿÿÿÿ8Ç¼Åƒƒ2J$72507ae7-7b03-488d-8e2b-9cd6d00a114d
+java:S2159²"VRemove this call to "equals"; comparisons between unrelated types always return false.(½ì‚¾ùÿÿÿÿ8æš½©ƒ2J$0cb0bb4e-aa60-4350-9718-e8383cb4dd15
 Ÿ
-java:S2159­"VRemove this call to "equals"; comparisons between unrelated types always return false.(½ì‚¾ùÿÿÿÿ8È¼Åƒƒ2J$e68437e3-1706-47b4-8e5a-0a78cb775340
-‰
-java:S1128
-"ARemove this unused import 'org.springframework.data.domain.Page'.(˜âüÿÿÿÿ8¶Î˜„ƒ2J$1565a071-90b1-4306-b409-7edbdec0cfa8
-
-java:S1128"ERemove this unused import 'org.springframework.data.domain.Pageable'.(‡ë‚Öıÿÿÿÿ8¶Î˜„ƒ2J$35b169a1-eac8-4134-94d8-c4e67a43aa93
+java:S2159²"VRemove this call to "equals"; comparisons between unrelated types always return false.(½ì‚¾ùÿÿÿÿ8æš½©ƒ2J$b5638aee-dd3b-4cdf-863d-62423ef09658

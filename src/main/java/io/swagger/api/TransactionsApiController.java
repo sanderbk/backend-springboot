@@ -27,6 +27,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -106,16 +108,16 @@ public class TransactionsApiController implements TransactionsApi {
     @PreAuthorize("hasAnyRole('EMPLOYEE', 'CUSTOMER')")
     @GetMapping("/transactions/user")
     public ResponseEntity<List<TransactionDTO>> getTransactionsByUser() {
-
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-
         User user = userService.findByUsername(username);
         if (user == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
         }
 
-        List<Transaction> transactions = transService.findTransactionsByUserId(user.getId());
+        UUID userId = user.getId();
+
+        List<Transaction> transactions = transService.findTransactionsByUserId(userId);
 
         List<TransactionDTO> transactionDTOs = transactions.stream()
                 .map(transaction -> modelMapper.map(transaction, TransactionDTO.class))
@@ -128,6 +130,32 @@ public class TransactionsApiController implements TransactionsApi {
     @GetMapping("/transactions/employee")
     public ResponseEntity<List<TransactionDTO>> getAllTransactionsForEmployees() {
         List<Transaction> transactions = transService.getAllTransactionsForEmployees();
+
+        List<TransactionDTO> transactionDTOs = transactions.stream()
+                .map(transaction -> modelMapper.map(transaction, TransactionDTO.class))
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(transactionDTOs);
+    }
+
+    @PreAuthorize("hasAnyRole('EMPLOYEE', 'CUSTOMER')")
+    @GetMapping("/transactions/user/filter")
+    public ResponseEntity<List<TransactionDTO>> getFilteredTransactions(
+            @RequestParam(value = "fromAccount", required = false) String fromAccount,
+            @RequestParam(value = "toAccount", required = false) String toAccount,
+            @RequestParam(value = "amount", required = false) Double amount,
+            @RequestParam(value = "amountFilterType", required = false) String amountFilterType) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        User user = userService.findByUsername(username);
+        if (user == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+        }
+
+        UUID userId = user.getId();
+
+        List<Transaction> transactions = transService.findFilteredTransactions(userId, fromAccount, toAccount, amount, amountFilterType);
 
         List<TransactionDTO> transactionDTOs = transactions.stream()
                 .map(transaction -> modelMapper.map(transaction, TransactionDTO.class))
