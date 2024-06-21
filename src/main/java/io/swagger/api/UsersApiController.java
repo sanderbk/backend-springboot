@@ -25,6 +25,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-05-23T13:04:25.984Z[GMT]")
@@ -92,6 +93,20 @@ public class UsersApiController implements UsersApi {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
         }
 
+    }
+
+    @PreAuthorize("hasRole('EMPLOYEE')")
+    @GetMapping("/users/{id}")
+    public ResponseEntity<UserDTO> getUserById(
+            @Parameter(in = ParameterIn.PATH, description = "User ID", required = true, schema = @Schema())
+            @PathVariable("id") UUID id) {
+        try {
+            User user = userService.findById(id);
+            UserDTO response = mapper.map(user, UserDTO.class);
+            return new ResponseEntity<UserDTO>(response, HttpStatus.OK);
+        } catch (NoSuchElementException ex) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User with given ID not found");
+        }
     }
 
     @PreAuthorize("hasRole('EMPLOYEE')")

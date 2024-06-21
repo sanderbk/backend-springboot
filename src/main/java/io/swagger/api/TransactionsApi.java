@@ -16,8 +16,6 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -79,7 +77,7 @@ public interface TransactionsApi {
     @RequestMapping(value = "/transactions/employee",
             produces = { "application/json" },
             method = RequestMethod.GET)
-    ResponseEntity<List<TransactionDTO>> getAllTransactionsForEmployees();
+    ResponseEntity<List<TransactionDTO>> getAllTransactionsForEmployees(@Parameter(in = ParameterIn.QUERY, description = "User ID to fetch transactions for", required=true, schema=@Schema()) UUID userId);
 
 
 }

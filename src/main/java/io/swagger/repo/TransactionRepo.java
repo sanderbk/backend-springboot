@@ -35,7 +35,4 @@ public interface TransactionRepo extends JpaRepository<Transaction, UUID> {
             @Param("amountFilterType") String amountFilterType,
             @Param("startTime") LocalDateTime startTime,
             @Param("endTime") LocalDateTime endTime);
-
-
-
 }

@@ -7,8 +7,6 @@ import io.swagger.model.enumeration.AccountType;
 import io.swagger.repo.AccountRepo;
 import io.swagger.repo.TransactionRepo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -139,8 +137,8 @@ public class TransactionService {
         return transactionRepo.findByUserPerforming(userId);
     }
 
-    public List<Transaction> getAllTransactionsForEmployees() {
-        return transactionRepo.findAll();
+    public List<Transaction> getAllTransactionsForEmployees(UUID userId) {
+        return transactionRepo.findByUserPerforming(userId);
     }
 
     public List<Transaction> findFilteredTransactions(UUID userId, String fromAccount, String toAccount, Double amount, String amountFilterType, LocalDateTime startTime, LocalDateTime endTime) {

@@ -1695,3 +1695,5 @@ w
 G.idea/sonarlint/issuestore/c/6/c634b4a1e3ff800856164348b59969684a28b194,5\7\57f559784caba18d041a897daf165c6515eeabf6
 w
 G.idea/sonarlint/issuestore/c/6/c65f31bef14f8ec69cc910f8d065fe590e87dcb7,6\4\64a54cb361eae23e9d5b4e94f1f7afbc76e971bf
+g
+7src/main/java/io/swagger/api/AccountsApiController.java,e\1\e13279ac1137797507345f1ece5c94297eeddf5b
