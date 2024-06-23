@@ -1,0 +1,11 @@
+
+’
+java:S2259|"JA "NullPointerException" could be thrown; "findByPhone()" can return null.(ôàìÂşÿÿÿÿ8İ³Ñƒ2J$55447a2a-2ce0-42ea-b198-ac8fcf2cad03
+…
+java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞ8ä³Ñƒ2J$2731632d-0fea-4aa0-ac7f-73f2407cac24
+…
+java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞ8å³Ñƒ2J$ab74694a-2c04-4cbb-bb8d-f0a92d462f8a
+…
+java:S6813 "BRemove this field injection and use constructor injection instead.(êæÄŞ8æ³Ñƒ2J$cb454cdf-ccf5-48ea-b245-93ea3bb4a53c
+…
+java:S6813#"BRemove this field injection and use constructor injection instead.(êæÄŞ8ç³Ñƒ2J$2e6314d3-c95e-4e5b-a9fe-1fcd7143535c

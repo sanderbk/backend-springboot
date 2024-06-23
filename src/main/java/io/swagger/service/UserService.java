@@ -115,7 +115,6 @@ public class UserService {
         if (findByUsername(user.getUsername()) != null && !findByUsername(user.getUsername()).equals(user)) {
             throw new IllegalArgumentException("Username is already in use! Please try again");
         }
-
         // Check if a user exists, that is not the same as the given user, with the given user's email address
         if (findByEmail(user.getEmail()) != null && !findByEmail(user.getEmail()).equals(user)) {
             throw new IllegalArgumentException("Email is already in use! Please try again");

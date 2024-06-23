@@ -15,6 +15,7 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,6 +26,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -60,13 +62,13 @@ public class TransactionsApiController implements TransactionsApi {
     }
 
     @PreAuthorize("hasAnyRole('EMPLOYEE', 'CUSTOMER')")
-    public ResponseEntity<TransactionDTO> createTransaction(@Parameter(in = ParameterIn.DEFAULT, description = "New transaction object", required=true, schema=@Schema()) @Valid @RequestBody TransactionDTO body) {
+    public ResponseEntity<TransactionDTO> createTransaction(@Parameter(in = ParameterIn.DEFAULT, description = "New transaction object", required = true, schema = @Schema()) @Valid @RequestBody TransactionDTO body) {
         try {
             Transaction trans = modelMapper.map(body, Transaction.class);
             trans.setId(UUID.randomUUID());
             trans.setFrom(accountService.findAccountByIban(body.getFrom()).orElseThrow());
 
-            switch (trans.getTransactionType()){
+            switch (trans.getTransactionType()) {
                 case REGULAR:
                     trans = transService.createTransaction(trans);
                     break;
@@ -77,6 +79,7 @@ public class TransactionsApiController implements TransactionsApi {
                     trans = transService.createDeposit(trans);
                     break;
             }
+
 
             TransactionDTO response = modelMapper.map(trans, TransactionDTO.class);
             response.setFrom(body.getFrom());
@@ -103,16 +106,16 @@ public class TransactionsApiController implements TransactionsApi {
     @PreAuthorize("hasAnyRole('EMPLOYEE', 'CUSTOMER')")
     @GetMapping("/transactions/user")
     public ResponseEntity<List<TransactionDTO>> getTransactionsByUser() {
-
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-
         User user = userService.findByUsername(username);
         if (user == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
         }
 
-        List<Transaction> transactions = transService.findTransactionsByUserId(user.getId());
+        UUID userId = user.getId();
+
+        List<Transaction> transactions = transService.findTransactionsByUserId(userId);
 
         List<TransactionDTO> transactionDTOs = transactions.stream()
                 .map(transaction -> modelMapper.map(transaction, TransactionDTO.class))
@@ -121,5 +124,47 @@ public class TransactionsApiController implements TransactionsApi {
         return ResponseEntity.ok(transactionDTOs);
     }
 
+    @PreAuthorize("hasAnyRole('EMPLOYEE', 'CUSTOMER')")
+    @GetMapping("/transactions/user/filter")
+    public ResponseEntity<List<TransactionDTO>> getFilteredTransactions(
+            @RequestParam(value = "fromAccount", required = false) String fromAccount,
+            @RequestParam(value = "toAccount", required = false) String toAccount,
+            @RequestParam(value = "amount", required = false) Double amount,
+            @RequestParam(value = "amountFilterType", required = false) String amountFilterType,
+            @RequestParam(value = "startTime", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startTime,
+            @RequestParam(value = "endTime", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endTime) {
 
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        User user = userService.findByUsername(username);
+        if (user == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+        }
+
+        UUID userId = user.getId();
+
+        List<Transaction> transactions = transService.findFilteredTransactions(userId, fromAccount, toAccount, amount, amountFilterType, startTime, endTime);
+
+        List<TransactionDTO> transactionDTOs = transactions.stream()
+                .map(transaction -> modelMapper.map(transaction, TransactionDTO.class))
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(transactionDTOs);
+    }
+
+    @PreAuthorize("hasRole('EMPLOYEE')")
+    @GetMapping("/transactions/employee")
+    public ResponseEntity<List<TransactionDTO>> getAllTransactionsForEmployees(@RequestParam("userId") UUID userId) {
+        List<Transaction> transactions = transService.getAllTransactionsForEmployees(userId);
+
+        if (transactions.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No transactions found for the given user ID");
+        }
+
+        List<TransactionDTO> transactionDTOs = transactions.stream()
+                .map(transaction -> modelMapper.map(transaction, TransactionDTO.class))
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(transactionDTOs);
+    }
 }
