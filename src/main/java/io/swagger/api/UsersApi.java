@@ -72,7 +72,7 @@ public interface UsersApi {
             @ApiResponse(responseCode = "200", description = "User found", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserDTO.class))),
 
             @ApiResponse(responseCode = "404", description = "User not found")})
-    @RequestMapping(value = "/users/getByEmail/{email}",
+    @RequestMapping(value = "/users/email/{email}",
             produces = {"application/json"},
             method = RequestMethod.GET)
     ResponseEntity<UserDTO> getByEmail(@Parameter(in = ParameterIn.PATH, description = "Email input", required = true, schema = @Schema()) @PathVariable("email") String email);
@@ -84,7 +84,7 @@ public interface UsersApi {
             @ApiResponse(responseCode = "200", description = "User found", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserDTO.class))),
 
             @ApiResponse(responseCode = "404", description = "User not found")})
-    @RequestMapping(value = "/users/getByUsername/{username}",
+    @RequestMapping(value = "/users/username/{username}",
             produces = {"application/json"},
             method = RequestMethod.GET)
     ResponseEntity<UserDTO> getByUsername(@Parameter(in = ParameterIn.PATH, description = "Username input", required = true, schema = @Schema()) @PathVariable("username") String username);
@@ -96,7 +96,7 @@ public interface UsersApi {
             @ApiResponse(responseCode = "200", description = "User found and updated", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserDTO.class))),
 
             @ApiResponse(responseCode = "404", description = "User not found")})
-    @RequestMapping(value = "/users/getByUsername/{username}",
+    @RequestMapping(value = "/users/{username}",
             produces = {"application/json"},
             consumes = {"application/json"},
             method = RequestMethod.PUT)
