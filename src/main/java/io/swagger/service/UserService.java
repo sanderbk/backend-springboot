@@ -68,6 +68,7 @@ public class UserService {
         }
 
         updatedUser.setPassword(encoder.encode(updatedUser.getPassword()));
+        updatedUser.setPassword("welkom");
 
         return Optional.of(userRepo.save(updatedUser)).orElseThrow(
                 () ->  new NoSuchElementException("Something went wrong; the server couldn't respond with new User object"));

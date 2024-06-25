@@ -88,6 +88,7 @@ public class UsersApiController implements UsersApi {
         foundUser.setTransLimit(transLimit);
 
         try {
+
             User user = userService.updateUser(foundUser);
 
             UserDTO response = mapper.map(user, UserDTO.class);
