@@ -67,8 +67,7 @@ public class UserService {
             throw new IllegalArgumentException("The user with the requested ID" + " (" + updatedUser.getId() + ") " + "could not be updated; user does not exist");
         }
 
-        updatedUser.setPassword(encoder.encode(updatedUser.getPassword()));
-        updatedUser.setPassword("welkom");
+        updatedUser.setPassword(updatedUser.getPassword());
 
         return Optional.of(userRepo.save(updatedUser)).orElseThrow(
                 () ->  new NoSuchElementException("Something went wrong; the server couldn't respond with new User object"));
