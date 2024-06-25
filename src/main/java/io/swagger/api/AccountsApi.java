@@ -84,7 +84,7 @@ public interface AccountsApi {
             @ApiResponse(responseCode = "200", description = "Account found and updated", content = @Content(mediaType = "application/json", schema = @Schema(implementation = AccountDTO.class))),
 
             @ApiResponse(responseCode = "404", description = "Account IBAN not found") })
-    @RequestMapping(value = "/accounts/iban/{iban}",
+    @RequestMapping(value = "/accounts/{iban}",
             produces = { "application/json" },
             consumes = { "application/json" },
             method = RequestMethod.PUT)
