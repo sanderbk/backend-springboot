@@ -95,7 +95,6 @@ public interface AccountsApi {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Accounts found", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = AccountDTO.class)))),
 
-
             @ApiResponse(responseCode = "404", description = "Accounts not found") })
     @RequestMapping(value = "/accounts/username/{username}",
             produces = { "application/json" },

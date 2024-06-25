@@ -76,17 +76,22 @@ public class UsersApiController implements UsersApi {
     }
 
     @PreAuthorize("hasAnyRole('EMPLOYEE', 'CUSTOMER')")
-    public ResponseEntity<UserDTO> updateUser(@Parameter(in = ParameterIn.PATH, description = "Username input", required = true, schema = @Schema()) @PathVariable("username") String username, @Parameter(in = ParameterIn.DEFAULT, description = "Updated user object", required = true, schema = @Schema()) @Valid @RequestBody UserDTO body) {
-
+    public ResponseEntity<UserDTO> updateUser(
+            @Parameter(in = ParameterIn.PATH, description = "Username input", required = true, schema = @Schema()) @PathVariable("username")
+            String username, @Parameter(in = ParameterIn.DEFAULT, description = "Updated user object", required = true, schema = @Schema())
+    @RequestParam("dayLimit") Double dayLimit,
+    @RequestParam("transLimit") Double transLimit) {
 
         User foundUser = userService.findByUsername(username);
-        foundUser.setDayLimit(body.getDayLimit());
-        foundUser.setTransLimit(body.getDayLimit());
+
+        foundUser.setDayLimit(dayLimit);
+        foundUser.setTransLimit(transLimit);
 
         try {
             User user = userService.updateUser(foundUser);
 
             UserDTO response = mapper.map(user, UserDTO.class);
+
             return new ResponseEntity<UserDTO>(response, HttpStatus.CREATED);
         } catch (IllegalArgumentException | NoSuchElementException ex) {
             // If the service throws an Exception, throw a ResponseStatusException to provide the frontend with the right HTTP Status Code & Error Message
