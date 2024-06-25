@@ -10,6 +10,7 @@ import lombok.Setter;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
+import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -36,6 +37,7 @@ public class TransactionDTO {
   private String to = null;
 
   @JsonProperty("amount")
+  @DecimalMin(value = "0.01", message = "Amount must be greater than 0")
   private Double amount = null;
 
   @JsonProperty("userPerforming")
