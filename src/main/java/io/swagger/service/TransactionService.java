@@ -34,7 +34,6 @@ public class TransactionService {
         Account accountTo = getAccountByIban(trans.getTo());
 
         validateAccounts(accountFrom, accountTo);
-
         checkGeneralConditions(trans);
 
         // Only regular transactions have a daily limit
@@ -44,9 +43,6 @@ public class TransactionService {
 
         trans.setAccountType(determineAccountType(accountFrom, accountTo));
         updateBalances(accountFrom, accountTo, trans.getAmount());
-
-        // Set the account type based on the transaction accounts
-        trans.setAccountType(determineAccountType(accountFrom, accountTo));
 
         return transactionRepo.save(trans);
     }
@@ -173,7 +169,7 @@ public class TransactionService {
     }
 
     private AccountType determineAccountType(Account accountFrom, Account accountTo) {
-        if (accountFrom.getAccountType().equals("SAVINGS") || accountTo.getAccountType().equals("SAVINGS")) {
+        if (accountFrom.getAccountType().equals(AccountType.SAVINGS) || accountTo.getAccountType().equals(AccountType.SAVINGS)) {
             return AccountType.SAVINGS;
         } else {
             return AccountType.CURRENT;
