@@ -51,6 +51,8 @@ public class CustomApplicationRunner implements ApplicationRunner {
         wim.setActive(true);
         wim.setUsername("wimmelstein");
         wim.setPassword("welkom");
+        wim.setFirstname("Wim");
+        wim.setLastname("Wiltenburg");
         wim.setEmail("wim@wim.nl");
         wim.setPhone("+316 512345678");
         wim.setDayLimit(1000.00);
@@ -67,11 +69,11 @@ public class CustomApplicationRunner implements ApplicationRunner {
 
         User frank = new User();
         String frankid = "c18044a9-0b40-42e6-b079-cac2543602a7";
-        frank.setFirstname("Frank");
-        frank.setLastname("EnStein");
         frank.setId(UUID.fromString(frankid));
         frank.setActive(true);
         frank.setUsername("frankenstein");
+        frank.setFirstname("Frank");
+        frank.setLastname("Dersjant");
         frank.setPassword("welkom");
         frank.setEmail("frank@frank.nl");
         frank.setPhone("+316 112345678");
