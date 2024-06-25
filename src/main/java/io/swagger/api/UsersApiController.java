@@ -95,7 +95,7 @@ public class UsersApiController implements UsersApi {
 
     }
 
-    @PreAuthorize("hasRole('EMPLOYEE')")
+    @PreAuthorize("hasAnyRole('EMPLOYEE', 'CUSTOMER')")
     @GetMapping("/users/{id}")
     public ResponseEntity<UserDTO> getUserById(
             @Parameter(in = ParameterIn.PATH, description = "User ID", required = true, schema = @Schema())
@@ -109,7 +109,7 @@ public class UsersApiController implements UsersApi {
         }
     }
 
-    @PreAuthorize("hasRole('EMPLOYEE')")
+    @PreAuthorize("hasAnyRole('EMPLOYEE', 'CUSTOMER')")
     public ResponseEntity<UserDTO> getByEmail(@Parameter(in = ParameterIn.PATH, description = "Email input", required = true, schema = @Schema()) @PathVariable("email") String email) {
         try {
             UserDTO response = mapper.map(userService.findByEmail(email), UserDTO.class);
@@ -120,7 +120,7 @@ public class UsersApiController implements UsersApi {
 
     }
 
-    @PreAuthorize("hasRole('EMPLOYEE')")
+    @PreAuthorize("hasAnyRole('EMPLOYEE', 'CUSTOMER')")
     public ResponseEntity<UserDTO> getByUsername(@Parameter(in = ParameterIn.PATH, description = "Username input", required = true, schema = @Schema()) @PathVariable("username") String username) {
         try {
             UserDTO response = mapper.map(userService.findByUsername(username), UserDTO.class);
@@ -135,7 +135,7 @@ public class UsersApiController implements UsersApi {
     // The getAll type methods will always return a List<User> with at least 1 element, because a token is needed for these endpoints and an existing User needs to log in.
     // There is also a standard User (bank).
 
-    @PreAuthorize("hasRole('EMPLOYEE')")
+    @PreAuthorize("hasAnyRole('EMPLOYEE', 'CUSTOMER')")
     public ResponseEntity<List<UserDTO>> getAllUsers(@Min(0) @Parameter(in = ParameterIn.QUERY, description = "Number of records to skip for pagination", schema = @Schema(allowableValues = {})) @Valid @RequestParam(value = "skip", required = false) Integer skip, @Min(1) @Max(200000) @Parameter(in = ParameterIn.QUERY, description = "Maximum number of records to return", schema = @Schema(allowableValues = {}, minimum = "1", maximum = "200000")) @Valid @RequestParam(value = "limit", required = false) Integer limit) {
 
         List<UserDTO> dtos = userService.getAll(skip, limit)
@@ -146,7 +146,7 @@ public class UsersApiController implements UsersApi {
         return new ResponseEntity<List<UserDTO>>(dtos, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('EMPLOYEE')")
+    @PreAuthorize("hasAnyRole('EMPLOYEE', 'CUSTOMER')")
     public ResponseEntity<List<UserDTO>> getAllUsersWithoutAccount() {
 
         List<UserDTO> dtos = userService.getAllWithoutAccount()
