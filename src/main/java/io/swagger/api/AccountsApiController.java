@@ -61,6 +61,7 @@ public class AccountsApiController implements AccountsApi {
     public ResponseEntity<AccountDTO> addAccount(@Parameter(in = ParameterIn.DEFAULT, description = "New account object", required = true, schema = @Schema()) @Valid @RequestBody AccountDTO body) {
         try {
             Account account = modelMapper.map(body, Account.class);
+
             User user = userService.findById(body.getOwnerId());
             account.setUser(user);
 

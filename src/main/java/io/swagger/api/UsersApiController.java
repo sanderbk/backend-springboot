@@ -78,13 +78,13 @@ public class UsersApiController implements UsersApi {
     @PreAuthorize("hasAnyRole('EMPLOYEE', 'CUSTOMER')")
     public ResponseEntity<UserDTO> updateUser(@Parameter(in = ParameterIn.PATH, description = "Username input", required = true, schema = @Schema()) @PathVariable("username") String username, @Parameter(in = ParameterIn.DEFAULT, description = "Updated user object", required = true, schema = @Schema()) @Valid @RequestBody UserDTO body) {
 
-        User user = mapper.map(body, User.class);
+
+        User foundUser = userService.findByUsername(username);
+        foundUser.setDayLimit(body.getDayLimit());
+        foundUser.setTransLimit(body.getDayLimit());
 
         try {
-            // Check if a user exist with the given user's username, email or phone number
-            userService.doesUserDataExist(user);
-
-            user = userService.updateUser(user);
+            User user = userService.updateUser(foundUser);
 
             UserDTO response = mapper.map(user, UserDTO.class);
             return new ResponseEntity<UserDTO>(response, HttpStatus.CREATED);
