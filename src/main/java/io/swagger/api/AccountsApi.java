@@ -47,7 +47,7 @@ public interface AccountsApi {
             @ApiResponse(responseCode = "200", description = "Account found", content = @Content(mediaType = "application/json", schema = @Schema(implementation = AccountDTO.class))),
 
             @ApiResponse(responseCode = "404", description = "Account not found") })
-    @RequestMapping(value = "/accounts/getByIban/{iban}",
+    @RequestMapping(value = "/accounts/iban/{iban}",
             produces = { "application/json" },
             method = RequestMethod.GET)
     ResponseEntity<AccountDTO> getAccountByIban(@Parameter(in = ParameterIn.PATH, description = "IBAN input", required=true, schema=@Schema()) @PathVariable("iban") String iban);
@@ -71,7 +71,7 @@ public interface AccountsApi {
             @ApiResponse(responseCode = "200", description = "Accounts found", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = AccountDTO.class)))),
 
             @ApiResponse(responseCode = "404", description = "Accounts not found") })
-    @RequestMapping(value = "/accounts/getByUserID/{userID}",
+    @RequestMapping(value = "/accounts/userid/{userID}",
             produces = { "application/json" },
             method = RequestMethod.GET)
 
@@ -84,7 +84,7 @@ public interface AccountsApi {
             @ApiResponse(responseCode = "200", description = "Account found and updated", content = @Content(mediaType = "application/json", schema = @Schema(implementation = AccountDTO.class))),
 
             @ApiResponse(responseCode = "404", description = "Account IBAN not found") })
-    @RequestMapping(value = "/accounts/{iban}",
+    @RequestMapping(value = "/accounts/iban/{iban}",
             produces = { "application/json" },
             consumes = { "application/json" },
             method = RequestMethod.PUT)
@@ -95,8 +95,9 @@ public interface AccountsApi {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Accounts found", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = AccountDTO.class)))),
 
+
             @ApiResponse(responseCode = "404", description = "Accounts not found") })
-    @RequestMapping(value = "/accounts/getByUsername/{username}",
+    @RequestMapping(value = "/accounts/username/{username}",
             produces = { "application/json" },
             method = RequestMethod.GET)
 
