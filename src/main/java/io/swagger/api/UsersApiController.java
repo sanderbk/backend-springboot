@@ -2,6 +2,7 @@ package io.swagger.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.Api;
+import io.swagger.api.request.PutUserLimitRequest;
 import io.swagger.model.dto.UserDTO;
 import io.swagger.model.entity.User;
 import io.swagger.service.UserService;
@@ -72,20 +73,18 @@ public class UsersApiController implements UsersApi {
         } catch (IllegalArgumentException | NoSuchElementException ex) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, ex.getMessage());
         }
-
     }
 
     @PreAuthorize("hasAnyRole('EMPLOYEE', 'CUSTOMER')")
     public ResponseEntity<UserDTO> updateUser(
             @Parameter(in = ParameterIn.PATH, description = "Username input", required = true, schema = @Schema()) @PathVariable("username")
             String username, @Parameter(in = ParameterIn.DEFAULT, description = "Updated user object", required = true, schema = @Schema())
-    @RequestParam("dayLimit") Double dayLimit,
-    @RequestParam("transLimit") Double transLimit) {
+            @RequestBody PutUserLimitRequest userLimitRequest) {
 
         User foundUser = userService.findByUsername(username);
 
-        foundUser.setDayLimit(dayLimit);
-        foundUser.setTransLimit(transLimit);
+        foundUser.setDayLimit(userLimitRequest.getDayLimit());
+        foundUser.setTransLimit(userLimitRequest.getTransLimit());
 
         try {
 

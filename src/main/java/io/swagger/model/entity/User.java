@@ -39,6 +39,12 @@ public class User {
     private Double transLimit;
     private Boolean active;
 
+
+    public String getFullname() {
+        return firstname + " " + lastname;
+    }
+
+
     @OneToMany(mappedBy = "user")
     private List<Account> accounts;
 }

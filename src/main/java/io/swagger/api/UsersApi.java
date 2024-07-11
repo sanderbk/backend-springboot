@@ -5,6 +5,7 @@
  */
 package io.swagger.api;
 
+import io.swagger.api.request.PutUserLimitRequest;
 import io.swagger.model.dto.UserDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -72,7 +73,7 @@ public interface UsersApi {
             @ApiResponse(responseCode = "200", description = "User found", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserDTO.class))),
 
             @ApiResponse(responseCode = "404", description = "User not found")})
-    @RequestMapping(value = "/users/email/{email}",
+    @RequestMapping(value = "/users/getByEmail/{email}",
             produces = {"application/json"},
             method = RequestMethod.GET)
     ResponseEntity<UserDTO> getByEmail(@Parameter(in = ParameterIn.PATH, description = "Email input", required = true, schema = @Schema()) @PathVariable("email") String email);
@@ -84,12 +85,11 @@ public interface UsersApi {
             @ApiResponse(responseCode = "200", description = "User found", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserDTO.class))),
 
             @ApiResponse(responseCode = "404", description = "User not found")})
-    @RequestMapping(value = "/users/username/{username}",
+    @RequestMapping(value = "/users/getByUserName/{username}",
             produces = {"application/json"},
             method = RequestMethod.GET)
     ResponseEntity<UserDTO> getByUsername(@Parameter(in = ParameterIn.PATH, description = "Username input", required = true, schema = @Schema()) @PathVariable("username") String username);
-
-
+    
     @Operation(summary = "Updates a user", description = "By sending this request, an employee or customer can update the information of one user ", security = {
             @SecurityRequirement(name = "bearerAuth")}, tags = {"Employee", "Customer"})
     @ApiResponses(value = {
@@ -101,8 +101,7 @@ public interface UsersApi {
             consumes = {"application/json"},
             method = RequestMethod.PUT)
     ResponseEntity<UserDTO> updateUser(@Parameter(in = ParameterIn.PATH, description = "Username input", required = true, schema = @Schema()) @PathVariable("username") String username, @Parameter(in = ParameterIn.DEFAULT, description = "Updated user object", required = true, schema = @Schema())
-    @RequestParam("dayLimit") Double dayLimit,
-    @RequestParam("transLimit") Double transLimit);
+    @RequestBody PutUserLimitRequest userLimitRequest);
 
 }
 

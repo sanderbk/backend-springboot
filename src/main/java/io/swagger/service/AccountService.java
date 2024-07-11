@@ -1,16 +1,18 @@
 package io.swagger.service;
 
+import io.swagger.api.exception.NotFoundException;
+import io.swagger.api.request.SearchAccountRequest;
 import io.swagger.model.entity.Account;
 import io.swagger.repo.AccountRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class AccountService {
@@ -25,7 +27,7 @@ public class AccountService {
         validateAccount(a);
 
         // Check if the IBAN already exists
-        if (accountRepo.findAccountByIban(a.getIban()).isPresent()) {
+        if (accountRepo.findAccountByIban(a.getIban()).stream().findFirst().isPresent()) {
             throw new IllegalArgumentException("An account with this IBAN already exists.");
         }
 
@@ -35,8 +37,7 @@ public class AccountService {
             a.setIban(iban);
         }
 
-        return Optional.of(accountRepo.save(a)).orElseThrow(
-                () ->  new NoSuchElementException("Something went wrong; the server couldn't respond with new account object"));
+        return Optional.of(accountRepo.save(a)).orElseThrow(() -> new NoSuchElementException("Something went wrong; the server couldn't respond with new account object"));
     }
 
     private void validateAccount(Account a) {
@@ -53,31 +54,41 @@ public class AccountService {
     public List<Account> findAccountsByUserId(UUID userId) {
         List<Account> accountList = accountRepo.findAccountsByUserId(userId);
 
-        if (accountList.isEmpty()) {
-            throw new IllegalArgumentException("Something went wrong trying to find accounts with userid: " + userId);
+        if (CollectionUtils.isEmpty(accountList)) {
+            throw new NotFoundException("Account not found for user with ID: " + userId);
         }
+
         return accountList;
     }
 
-    //find an accountlist by using the userid/owner id
-    public List<Account> findAccountsByUsername(String username) {
-        List<Account> accountList = accountRepo.findAccountsByUser_Username(username);
+    public Account updateAccount(Account updatedAccount, String iban) {
+        Optional<Account> optionalAccount = accountRepo.findAccountByIban(iban).stream().findFirst();
 
-        if (accountList.isEmpty()) {
-            throw new IllegalArgumentException("Something went wrong trying to find accounts with userid: " + username);
+        if (!optionalAccount.isPresent()) {
+            throw new NotFoundException("Account not found for IBAN: " + iban);
         }
-        return accountList;
-    }
 
+        Account existingAccount = optionalAccount.get();
+        
+        // Preserve the immutable properties
+        updatedAccount.setIban(existingAccount.getIban());
+        updatedAccount.setUser(existingAccount.getUser());
 
-    //update an account with newly inserted account
-    public Account updateAccount(Account a) {
-        return Optional.of(accountRepo.save(a)).orElseThrow(
-                () -> new IllegalArgumentException("Something went wrong trying to update your account."));
+        try {
+            return accountRepo.save(updatedAccount);
+        } catch (DataAccessException e) {
+            throw new RuntimeException("Something went wrong trying to update your account.", e);
+        }
     }
 
     //find an accountlist by iban input
     public Optional<Account> findAccountByIban(String iban) {
+        Optional<Account> optionalAccount = accountRepo.findAccountByIban(iban).stream().findFirst();
+
+        if (!optionalAccount.isPresent()) {
+            throw new NotFoundException("Account not found for IBAN: " + iban);
+        }
+
         return accountRepo.findAccountByIban(iban);
     }
 
@@ -95,6 +106,21 @@ public class AccountService {
 
         Pageable pageable = PageRequest.of(skip, limit);
         return accountRepo.findAll(pageable).getContent();
+    }
+
+    public Page<Account> getAllFiltered(SearchAccountRequest searchAccountRequest) {
+
+        var qryPage = searchAccountRequest.getPage().orElse(0);
+        var qrySize = searchAccountRequest.getSize().orElse(50);
+        Pageable pageAble = PageRequest.of(qryPage, qrySize);
+
+        var qryIban = searchAccountRequest.getIban().orElse("");
+        var qryFirstname = searchAccountRequest.getFirstname().orElse("");
+        var qryLastname = searchAccountRequest.getLastname().orElse("");
+        var qryUsername = searchAccountRequest.getUsername().orElse("");
+        var qryType = searchAccountRequest.getAccountType().orElse(null);
+
+        return accountRepo.findAccounts(qryIban, qryFirstname, qryLastname, qryUsername, qryType, pageAble);
     }
 
     public List<Account> getAll() {

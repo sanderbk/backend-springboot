@@ -26,16 +26,16 @@ import javax.validation.Valid;
 @Validated
 public interface LoginApi {
 
-    @Operation(summary = "User Login", description = "", tags={ "Employee", "Customer" })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "User login successful", content = @Content(mediaType = "application/json", schema = @Schema(implementation = TokenDTO.class))),
-        
-        @ApiResponse(responseCode = "401", description = "Request not authorized - Access token is missing or invalid") })
+    @Operation(summary = "User Login", description = "", tags = {"Employee", "Customer"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User login successful", content = @Content(mediaType = "application/json", schema = @Schema(implementation = TokenDTO.class))),
+
+            @ApiResponse(responseCode = "401", description = "Request not authorized - Access token is missing or invalid")})
     @RequestMapping(value = "/login",
-        produces = { "application/json" }, 
-        consumes = { "application/json" }, 
-        method = RequestMethod.POST)
-    ResponseEntity<TokenDTO> login(@Parameter(in = ParameterIn.DEFAULT, description = "Object with username and password to compare to existing data in DB", required=true, schema=@Schema()) @Valid @RequestBody LoginDTO body);
+            produces = {"application/json"},
+            consumes = {"application/json"},
+            method = RequestMethod.POST)
+    ResponseEntity<TokenDTO> login(@Parameter(in = ParameterIn.DEFAULT, description = "Object with username and password to compare to existing data in DB", required = true, schema = @Schema()) @Valid @RequestBody LoginDTO body);
 
 }
 

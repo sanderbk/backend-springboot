@@ -5,6 +5,7 @@
  */
 package io.swagger.api;
 
+import io.swagger.api.request.SearchAccountRequest;
 import io.swagger.model.dto.AccountDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -15,13 +16,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import java.util.List;
 import java.util.UUID;
 
@@ -30,76 +30,62 @@ import java.util.UUID;
 public interface AccountsApi {
 
     @Operation(summary = "Add a new bank account", description = "", security = {
-            @SecurityRequirement(name = "bearerAuth")    }, tags={ "Employee" })
+            @SecurityRequirement(name = "bearerAuth")}, tags = {"Employee"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Account created", content = @Content(mediaType = "application/json", schema = @Schema(implementation = AccountDTO.class))),
 
-            @ApiResponse(responseCode = "400", description = "Invalid account object") })
+            @ApiResponse(responseCode = "400", description = "Invalid account object")})
     @RequestMapping(value = "/accounts",
-            produces = { "application/json" },
-            consumes = { "application/json" },
+            produces = {"application/json"},
+            consumes = {"application/json"},
             method = RequestMethod.POST)
-    ResponseEntity<AccountDTO> addAccount(@Parameter(in = ParameterIn.DEFAULT, description = "New account object", required=true, schema=@Schema()) @Valid @RequestBody AccountDTO body);
+    ResponseEntity<AccountDTO> addAccount(@Parameter(in = ParameterIn.DEFAULT, description = "New account object", required = true, schema = @Schema()) @Valid @RequestBody AccountDTO body);
 
-    @Operation(summary = "Search an account basesd on IBAN", description = "", security = {
-            @SecurityRequirement(name = "bearerAuth")    }, tags={ "Employee", "Customer" })
+    @Operation(summary = "Search an account based on IBAN input.", description = "", security = {
+            @SecurityRequirement(name = "bearerAuth")}, tags = {"Employee", "Customer"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Account found", content = @Content(mediaType = "application/json", schema = @Schema(implementation = AccountDTO.class))),
 
-            @ApiResponse(responseCode = "404", description = "Account not found") })
-    @RequestMapping(value = "/accounts/iban/{iban}",
-            produces = { "application/json" },
+            @ApiResponse(responseCode = "404", description = "Account not found")})
+    @RequestMapping(value = "/accounts/{iban}",
+            produces = {"application/json"},
             method = RequestMethod.GET)
-    ResponseEntity<AccountDTO> getAccountByIban(@Parameter(in = ParameterIn.PATH, description = "IBAN input", required=true, schema=@Schema()) @PathVariable("iban") String iban);
-
-    @Operation(summary = "Search account list with pagination", description = "By passing in the appropriate options, you can search for accounts in the DB ", security = {
-            @SecurityRequirement(name = "bearerAuth")    }, tags={ "Employee" })
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Search results matching criteria", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = AccountDTO.class)))),
-
-            @ApiResponse(responseCode = "400", description = "bad input parameter") })
-    @RequestMapping(value = "/accounts",
-            produces = { "application/json" },
-            method = RequestMethod.GET)
-    ResponseEntity<List<AccountDTO>> getAccounts(@Min(0)@Parameter(in = ParameterIn.QUERY, description = "Number of records to skip for pagination" ,schema=@Schema(allowableValues={  }
-    )) @Valid @RequestParam(value = "skip", required = false) Integer skip, @Min(1) @Max(200000) @Parameter(in = ParameterIn.QUERY, description = "Maximum number of records to return" ,schema=@Schema(allowableValues={  }, minimum="1", maximum="200000"
-    )) @Valid @RequestParam(value = "limit", required = false) Integer limit);
+    ResponseEntity<AccountDTO> getAccountByIban(@Parameter(in = ParameterIn.PATH, description = "IBAN input", required = true, schema = @Schema()) @PathVariable("iban") String iban);
 
     @Operation(summary = "Search an account list on UserID", description = "", security = {
-            @SecurityRequirement(name = "bearerAuth")    }, tags={ "Employee", "Customer" })
+            @SecurityRequirement(name = "bearerAuth")}, tags = {"Employee", "Customer"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Accounts found", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = AccountDTO.class)))),
 
-            @ApiResponse(responseCode = "404", description = "Accounts not found") })
-    @RequestMapping(value = "/accounts/userid/{userID}",
-            produces = { "application/json" },
+            @ApiResponse(responseCode = "404", description = "Accounts not found")})
+    @RequestMapping(value = "/accounts/getByUserId/{userID}",
+            produces = {"application/json"},
             method = RequestMethod.GET)
-
-    ResponseEntity<List<AccountDTO>> getAccountsByOwnerID(@Parameter(in = ParameterIn.PATH, description = "User ID input", required=true, schema=@Schema()) @PathVariable("userID") UUID userID);
-
+    ResponseEntity<List<AccountDTO>> getAccountsByUserId(@Parameter(in = ParameterIn.PATH, description = "User ID input", required = true, schema = @Schema()) @PathVariable("userID") UUID userID);
 
     @Operation(summary = "Updates an account", description = "By sending this request, an employee can update the account information with the given IBAN ", security = {
-            @SecurityRequirement(name = "bearerAuth")    }, tags={ "Employee", "Customer" })
+            @SecurityRequirement(name = "bearerAuth")}, tags = {"Employee", "Customer"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Account found and updated", content = @Content(mediaType = "application/json", schema = @Schema(implementation = AccountDTO.class))),
 
-            @ApiResponse(responseCode = "404", description = "Account IBAN not found") })
+            @ApiResponse(responseCode = "404", description = "Account IBAN not found")})
     @RequestMapping(value = "/accounts/{iban}",
-            produces = { "application/json" },
-            consumes = { "application/json" },
+            produces = {"application/json"},
+            consumes = {"application/json"},
             method = RequestMethod.PUT)
-    ResponseEntity<AccountDTO> updateAccount(@Parameter(in = ParameterIn.PATH, description = "IBAN input", required=true, schema=@Schema()) @PathVariable("iban") String iban, @Parameter(in = ParameterIn.DEFAULT, description = "Updated account object", required=true, schema=@Schema()) @Valid @RequestBody AccountDTO body);
+    ResponseEntity<AccountDTO> updateAccount(@Parameter(in = ParameterIn.PATH, description = "IBAN input", required = true, schema = @Schema()) @PathVariable("iban") String iban, @Parameter(in = ParameterIn.DEFAULT, description = "Updated account object", required = true, schema = @Schema()) @Valid @RequestBody AccountDTO body);
 
-    @Operation(summary = "Search an account list on username", description = "", security = {
-            @SecurityRequirement(name = "bearerAuth")    }, tags={ "Employee", "Customer" })
+    @Operation(summary = "Search account list based on query parameters with pagination", description = "By passing in the appropriate options, you can search for accounts in the DB", security = {
+            @SecurityRequirement(name = "bearerAuth")}, tags = {"Employee", "Customer"})
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Accounts found", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = AccountDTO.class)))),
+            @ApiResponse(responseCode = "200", description = "Search results matching criteria", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = AccountDTO.class)))),
 
-            @ApiResponse(responseCode = "404", description = "Accounts not found") })
-    @RequestMapping(value = "/accounts/username/{username}",
-            produces = { "application/json" },
+            @ApiResponse(responseCode = "400", description = "bad input parameter(s).")})
+    @RequestMapping(value = "/accounts/search",
+            produces = {"application/json"},
             method = RequestMethod.GET)
-
-    ResponseEntity<List<AccountDTO>> getAccountsByUsername(@Parameter(in = ParameterIn.PATH, description = "User Name input", required=true, schema=@Schema()) @PathVariable("username") String username);
+    ResponseEntity<Page<AccountDTO>> searchAccounts(
+            SearchAccountRequest searchAccountRequest
+    );
 
 }
