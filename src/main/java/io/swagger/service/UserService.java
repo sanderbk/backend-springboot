@@ -56,30 +56,34 @@ public class UserService {
 
         user.setPassword(encoder.encode(user.getPassword()));
 
+        //set hard values
+        user.setDayLimit(0.00);
+        user.setTransLimit(0.00);
+
         return Optional.of(userRepo.save(user)).orElseThrow(
-                () ->  new NoSuchElementException("Something went wrong; the server couldn't respond with new User object"));
+                () -> new NoSuchElementException("Something went wrong; the server couldn't respond with new User object"));
     }
 
     public User updateUser(User updatedUser) {
 
         // Check if User with given id exists before updating
-        if(this.findById(updatedUser.getId()) == null){
+        if (this.findById(updatedUser.getId()) == null) {
             throw new IllegalArgumentException("The user with the requested ID" + " (" + updatedUser.getId() + ") " + "could not be updated; user does not exist");
         }
 
         updatedUser.setPassword(updatedUser.getPassword());
 
         return Optional.of(userRepo.save(updatedUser)).orElseThrow(
-                () ->  new NoSuchElementException("Something went wrong; the server couldn't respond with new User object"));
+                () -> new NoSuchElementException("Something went wrong; the server couldn't respond with new User object"));
     }
 
     public List<User> getAll(Integer skip, Integer limit) {
 
-        if(skip == null){
+        if (skip == null) {
             skip = 0;
         }
 
-        if(limit == null){
+        if (limit == null) {
             limit = Integer.MAX_VALUE;
         }
 

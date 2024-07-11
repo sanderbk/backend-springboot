@@ -64,12 +64,12 @@ public class AccountService {
     public Account updateAccount(Account updatedAccount, String iban) {
         Optional<Account> optionalAccount = accountRepo.findAccountByIban(iban).stream().findFirst();
 
-        if (!optionalAccount.isPresent()) {
+        if (optionalAccount.isEmpty()) {
             throw new NotFoundException("Account not found for IBAN: " + iban);
         }
 
         Account existingAccount = optionalAccount.get();
-        
+
         // Preserve the immutable properties
         updatedAccount.setIban(existingAccount.getIban());
         updatedAccount.setUser(existingAccount.getUser());
@@ -85,27 +85,11 @@ public class AccountService {
     public Optional<Account> findAccountByIban(String iban) {
         Optional<Account> optionalAccount = accountRepo.findAccountByIban(iban).stream().findFirst();
 
-        if (!optionalAccount.isPresent()) {
+        if (optionalAccount.isEmpty()) {
             throw new NotFoundException("Account not found for IBAN: " + iban);
         }
 
         return accountRepo.findAccountByIban(iban);
-    }
-
-    public List<Account> getAll(Integer skip, Integer limit) {
-        if (skip == null && limit == null) {
-            return getAll();
-        }
-
-        if (skip == null) {
-            skip = 0;
-        }
-        if (limit == null) {
-            limit = Integer.MAX_VALUE;
-        }
-
-        Pageable pageable = PageRequest.of(skip, limit);
-        return accountRepo.findAll(pageable).getContent();
     }
 
     public Page<Account> getAllFiltered(SearchAccountRequest searchAccountRequest) {
@@ -121,10 +105,6 @@ public class AccountService {
         var qryType = searchAccountRequest.getAccountType().orElse(null);
 
         return accountRepo.findAccounts(qryIban, qryFirstname, qryLastname, qryUsername, qryType, pageAble);
-    }
-
-    public List<Account> getAll() {
-        return accountRepo.findAll();
     }
 
     //pincode check for integer
