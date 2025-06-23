@@ -2,7 +2,6 @@ package io.swagger.model.entity;
 
 import io.swagger.model.enumeration.AccountType;
 import io.swagger.model.enumeration.TransactionType;
-import io.swagger.model.enumeration.UserType;
 import lombok.Data;
 import lombok.ToString;
 
@@ -24,7 +23,7 @@ public class Transaction {
 
 
     @ToString.Exclude
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Account from;
 
     public void setFrom(Account from) {

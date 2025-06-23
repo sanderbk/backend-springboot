@@ -62,11 +62,19 @@ public class TransactionsApiController implements TransactionsApi {
     }
 
     @PreAuthorize("hasAnyRole('EMPLOYEE', 'CUSTOMER')")
-    public ResponseEntity<TransactionDTO> createTransaction(@Parameter(in = ParameterIn.DEFAULT, description = "New transaction object", required = true, schema = @Schema()) @Valid @RequestBody TransactionDTO body) {
+    public ResponseEntity<TransactionDTO> createTransaction(@Valid @RequestBody TransactionDTO body) {
         try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String username = authentication.getName();
+            User user = userService.findByUsername(username);
+            if (user == null) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+            }
+
             Transaction trans = modelMapper.map(body, Transaction.class);
             trans.setId(UUID.randomUUID());
             trans.setFrom(accountService.findAccountByIban(body.getFrom()).orElseThrow());
+            trans.setUserPerforming(user.getId()); // ✅ FIX: set the user performing the transaction
 
             switch (trans.getTransactionType()) {
                 case REGULAR:
@@ -80,16 +88,16 @@ public class TransactionsApiController implements TransactionsApi {
                     break;
             }
 
-
             TransactionDTO response = modelMapper.map(trans, TransactionDTO.class);
             response.setFrom(body.getFrom());
 
-            return new ResponseEntity<TransactionDTO>(response, HttpStatus.CREATED);
+            return new ResponseEntity<>(response, HttpStatus.CREATED);
 
         } catch (IllegalArgumentException exception) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exception.getMessage());
         }
     }
+
 
     @PreAuthorize("hasAnyRole('EMPLOYEE', 'CUSTOMER')")
     public ResponseEntity<TransactionDTO> getTransaction(@Parameter(in = ParameterIn.PATH, description = "Transaction ID input", required = true, schema = @Schema()) @PathVariable("id") UUID id) {
@@ -104,7 +112,7 @@ public class TransactionsApiController implements TransactionsApi {
     }
 
     @PreAuthorize("hasAnyRole('EMPLOYEE', 'CUSTOMER')")
-    @GetMapping("/transactions/user")
+    @GetMapping("users/me/transactions")
     public ResponseEntity<List<TransactionDTO>> getTransactionsByUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();

@@ -41,21 +41,36 @@ public class TransactionValidatorService {
         return (accountFrom.getBalance() - amount) >= accountFrom.getAbsLimit();
     }
 
+    public boolean doesNotExceedTransactionLimit(User user, Transaction transaction) {
+        Double transactionLimit = user.getTransLimit();
+
+        if (transactionLimit == null) {
+            return true; // unlimited
+        }
+
+        if (transactionLimit == 0.00) {
+            return true;
+        }
+
+        return transaction.getAmount() <= transactionLimit;
+    }
+
     public boolean doesNotExceedDayLimit(User user, Transaction transaction) {
         double dailyLimit = user.getDayLimit();
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime yesterday = now.minusHours(24);
-
-        List<Transaction> transactionsToday = transactionRepo.findAllByUserPerformingAndTimestampBetweenAndAccountTypeCurrent(user.getId(), yesterday, now);
-
+        List<Transaction> transactionsToday;
+        if (transaction.getAccountType() == AccountType.CURRENT) {
+            transactionsToday = transactionRepo.findAllByUserPerformingAndTimestampBetweenAndAccountTypeCurrent(user.getId(), yesterday, now);
+        } else {
+            return true; // Savings transactions bypass limit check
+        }
         double totalAmountToday = 0;
         for (Transaction t : transactionsToday) {
             totalAmountToday += t.getAmount();
         }
-
         return (totalAmountToday + transaction.getAmount()) <= dailyLimit;
     }
-
 
     public boolean areAccountsActive(String ibanFrom, String ibanTo) {
         Account from = accountService.findAccountByIban(ibanFrom).orElseThrow(() -> new NoSuchElementException("From account not found."));

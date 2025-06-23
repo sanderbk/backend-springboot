@@ -3,17 +3,18 @@ package io.swagger.api;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.Api;
 import io.swagger.api.request.PutUserLimitRequest;
+import io.swagger.api.request.SearchUserRequest;
 import io.swagger.model.dto.UserDTO;
 import io.swagger.model.entity.User;
 import io.swagger.service.UserService;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
-import org.hibernate.exception.ConstraintViolationException;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,12 +23,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-05-23T13:04:25.984Z[GMT]")
 @RestController
@@ -115,17 +112,6 @@ public class UsersApiController implements UsersApi {
     }
 
     @PreAuthorize("hasAnyRole('EMPLOYEE', 'CUSTOMER')")
-    public ResponseEntity<UserDTO> getByEmail(@Parameter(in = ParameterIn.PATH, description = "Email input", required = true, schema = @Schema()) @PathVariable("email") String email) {
-        try {
-            UserDTO response = mapper.map(userService.findByEmail(email), UserDTO.class);
-            return new ResponseEntity<UserDTO>(response, HttpStatus.OK);
-        } catch (IllegalArgumentException ex) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User with given email not found");
-        }
-
-    }
-
-    @PreAuthorize("hasAnyRole('EMPLOYEE', 'CUSTOMER')")
     public ResponseEntity<UserDTO> getByUsername(@Parameter(in = ParameterIn.PATH, description = "Username input", required = true, schema = @Schema()) @PathVariable("username") String username) {
         try {
             UserDTO response = mapper.map(userService.findByUsername(username), UserDTO.class);
@@ -137,28 +123,10 @@ public class UsersApiController implements UsersApi {
 
     }
 
-    // The getAll type methods will always return a List<User> with at least 1 element, because a token is needed for these endpoints and an existing User needs to log in.
-    // There is also a standard User (bank).
-
     @PreAuthorize("hasAnyRole('EMPLOYEE', 'CUSTOMER')")
-    public ResponseEntity<List<UserDTO>> getAllUsers(@Min(0) @Parameter(in = ParameterIn.QUERY, description = "Number of records to skip for pagination", schema = @Schema(allowableValues = {})) @Valid @RequestParam(value = "skip", required = false) Integer skip, @Min(1) @Max(200000) @Parameter(in = ParameterIn.QUERY, description = "Maximum number of records to return", schema = @Schema(allowableValues = {}, minimum = "1", maximum = "200000")) @Valid @RequestParam(value = "limit", required = false) Integer limit) {
-
-        List<UserDTO> dtos = userService.getAll(skip, limit)
-                .stream()
-                .map(user -> mapper.map(user, UserDTO.class))
-                .collect(Collectors.toList());
-
-        return new ResponseEntity<List<UserDTO>>(dtos, HttpStatus.OK);
-    }
-
-    @PreAuthorize("hasAnyRole('EMPLOYEE', 'CUSTOMER')")
-    public ResponseEntity<List<UserDTO>> getAllUsersWithoutAccount() {
-
-        List<UserDTO> dtos = userService.getAllWithoutAccount()
-                .stream()
-                .map(user -> mapper.map(user, UserDTO.class))
-                .collect(Collectors.toList());
-
-        return new ResponseEntity<List<UserDTO>>(dtos, HttpStatus.OK);
+    public ResponseEntity<Page<UserDTO>> searchUsers(@Parameter(description = "Search criteria for users") @Valid SearchUserRequest searchUserRequest) {
+        Page<User> userPage = userService.getAllFiltered(searchUserRequest);
+        Page<UserDTO> dtos = userPage.map(user -> mapper.map(user, UserDTO.class));
+        return ResponseEntity.ok(dtos);
     }
 }

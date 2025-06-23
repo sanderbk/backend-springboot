@@ -124,7 +124,7 @@ public class UserDTO {
      *
      * @return username
      **/
-    @Schema(example = "FluffyUnicorn77", required = true, description = "")
+    @Schema(example = "sander", required = true, description = "")
     @NotNull
 
     public String getUsername() {
@@ -145,7 +145,7 @@ public class UserDTO {
      *
      * @return password
      **/
-    @Schema(example = "SeCrEt!334", description = "")
+    @Schema(example = "welkom", description = "")
 
     public String getPassword() {
         return password;

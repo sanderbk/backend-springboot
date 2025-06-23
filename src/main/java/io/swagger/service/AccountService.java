@@ -26,18 +26,16 @@ public class AccountService {
     public Account addAccount(Account a) {
         validateAccount(a);
 
-        // Check if the IBAN already exists
-        if (accountRepo.findAccountByIban(a.getIban()).stream().findFirst().isPresent()) {
+        // If IBAN is not set or belongs to a normal user, assign or generate IBAN
+        accountIbanService.assignIbanIfMissing(a);
+
+        // Prevent duplicate IBANs
+        if (accountRepo.findAccountByIban(a.getIban()).isPresent()) {
             throw new IllegalArgumentException("An account with this IBAN already exists.");
         }
 
-        // Generate a new IBAN if it doesn't exist
-        if (!accountIbanService.isIbanPresent(a.getIban())) {
-            String iban = accountIbanService.generateIban();
-            a.setIban(iban);
-        }
-
-        return Optional.of(accountRepo.save(a)).orElseThrow(() -> new NoSuchElementException("Something went wrong; the server couldn't respond with new account object"));
+        return Optional.of(accountRepo.save(a))
+                .orElseThrow(() -> new NoSuchElementException("Something went wrong; the server couldn't respond with new account object"));
     }
 
     private void validateAccount(Account a) {

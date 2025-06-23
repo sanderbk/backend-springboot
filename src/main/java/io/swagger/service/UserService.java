@@ -1,10 +1,12 @@
 package io.swagger.service;
 
+import io.swagger.api.request.SearchUserRequest;
 import io.swagger.jwt.JwtTokenProvider;
 import io.swagger.model.dto.TokenDTO;
 import io.swagger.model.entity.User;
 import io.swagger.repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -15,7 +17,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
@@ -56,10 +57,6 @@ public class UserService {
 
         user.setPassword(encoder.encode(user.getPassword()));
 
-        //set hard values
-        user.setDayLimit(0.00);
-        user.setTransLimit(0.00);
-
         return Optional.of(userRepo.save(user)).orElseThrow(
                 () -> new NoSuchElementException("Something went wrong; the server couldn't respond with new User object"));
     }
@@ -76,26 +73,6 @@ public class UserService {
         return Optional.of(userRepo.save(updatedUser)).orElseThrow(
                 () -> new NoSuchElementException("Something went wrong; the server couldn't respond with new User object"));
     }
-
-    public List<User> getAll(Integer skip, Integer limit) {
-
-        if (skip == null) {
-            skip = 0;
-        }
-
-        if (limit == null) {
-            limit = Integer.MAX_VALUE;
-        }
-
-        Pageable pageable = PageRequest.of(skip, limit);
-        return userRepo.findAll(pageable).getContent();
-    }
-
-    public List<User> getAllWithoutAccount() {
-        return userRepo.findAllWithoutAccount();
-    }
-
-    // All findBy methods retrieve an Optional<User> from the repo
 
     public User findByUsername(String username) {
         return userRepo.findByUsername(username).orElse(null);
@@ -128,5 +105,19 @@ public class UserService {
         if (findByPhone(user.getPhone()) != null && !findByPhone(user.getPhone()).equals(user)) {
             throw new IllegalArgumentException("Phone number is already in use! Please try again");
         }
+    }
+
+    public Page<User> getAllFiltered(SearchUserRequest searchUserRequest) {
+        var qryPage = searchUserRequest.getPage().orElse(0);
+        var qrySize = searchUserRequest.getSize().orElse(50);
+        Pageable pageable = PageRequest.of(qryPage, qrySize);
+
+        var qryUsername = searchUserRequest.getUsername().orElse("");
+        var qryFirstname = searchUserRequest.getFirstname().orElse("");
+        var qryLastname = searchUserRequest.getLastname().orElse("");
+        var qryEmail = searchUserRequest.getEmail().orElse("");
+        var qryHasAccounts = searchUserRequest.getHasAccounts().orElse(null);
+
+        return userRepo.findUsers(qryUsername, qryFirstname, qryLastname, qryEmail, qryHasAccounts, pageable);
     }
 }

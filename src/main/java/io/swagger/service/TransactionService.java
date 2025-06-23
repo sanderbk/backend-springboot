@@ -36,7 +36,9 @@ public class TransactionService {
         validateAccounts(accountFrom, accountTo);
         checkGeneralConditions(trans);
 
-        // Only regular transactions have a daily limit
+        // Set the timestamp before limit check
+        trans.setTimestamp(LocalDateTime.now());
+
         if (isRegularTransaction(accountFrom, accountTo)) {
             checkDailyLimit(trans);
         }
@@ -79,10 +81,19 @@ public class TransactionService {
         if (!transactionValidatorService.hasSufficientFunds(accountFrom, trans.getAmount())) {
             throw new IllegalArgumentException("Cannot create transaction; Cannot exceed absolute limit.");
         }
+        
+        User userPerforming = userService.findById(trans.getUserPerforming());
+        if (!transactionValidatorService.doesNotExceedTransactionLimit(userPerforming, trans)) {
+            throw new IllegalArgumentException("Cannot create transaction; Cannot exceed transaction limit.");
+        }
     }
 
     private void checkDailyLimit(Transaction trans) {
         User userPerforming = userService.findById(trans.getUserPerforming());
+        Account accountFrom = getAccountByIban(trans.getFrom().getIban());
+        Account accountTo = getAccountByIban(trans.getTo());
+        AccountType transactionAccountType = determineAccountType(accountFrom, accountTo);
+        trans.setAccountType(transactionAccountType);
         if (!transactionValidatorService.doesNotExceedDayLimit(userPerforming, trans)) {
             throw new IllegalArgumentException("Cannot create transaction; Cannot exceed day limit.");
         }
@@ -110,10 +121,15 @@ public class TransactionService {
     public Transaction createWithdrawal(Transaction trans) {
         Account accountFrom = getAccountByIban(trans.getFrom().getIban());
         Account accountTo = getAccountByIban(trans.getTo());
+
         validatePinCode(trans);
         checkGeneralConditions(trans);
+
+        trans.setTimestamp(LocalDateTime.now());
+
         trans.setAccountType(determineAccountType(accountFrom, accountTo));
         checkDailyLimit(trans);
+
         updateFromBalance(accountFrom, trans.getAmount());
         return transactionRepo.save(trans);
     }

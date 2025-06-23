@@ -58,7 +58,7 @@ public interface AccountsApi {
             @ApiResponse(responseCode = "200", description = "Accounts found", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = AccountDTO.class)))),
 
             @ApiResponse(responseCode = "404", description = "Accounts not found")})
-    @RequestMapping(value = "/accounts/getByUserId/{userID}",
+    @RequestMapping(value = "/users/{userID}/accounts",
             produces = {"application/json"},
             method = RequestMethod.GET)
     ResponseEntity<List<AccountDTO>> getAccountsByUserId(@Parameter(in = ParameterIn.PATH, description = "User ID input", required = true, schema = @Schema()) @PathVariable("userID") UUID userID);
@@ -81,7 +81,7 @@ public interface AccountsApi {
             @ApiResponse(responseCode = "200", description = "Search results matching criteria", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = AccountDTO.class)))),
 
             @ApiResponse(responseCode = "400", description = "bad input parameter(s).")})
-    @RequestMapping(value = "/accounts/search",
+    @RequestMapping(value = "/accounts",
             produces = {"application/json"},
             method = RequestMethod.GET)
     ResponseEntity<Page<AccountDTO>> searchAccounts(

@@ -1,6 +1,9 @@
 package io.swagger.repo;
 
 import io.swagger.model.entity.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -24,8 +27,29 @@ public interface UserRepo extends JpaRepository<User, UUID> {
 
     Optional<User> findByPhone(String phone);
 
-    // Select all Users who do not have an account via JPQL
-    @Query(value = "SELECT u FROM User u WHERE NOT EXISTS (SELECT a FROM u.accounts a)")
-    List<User> findAllWithoutAccount();
+    default Page<User> findUsers(
+            String username, String firstname, String lastname, String email, Boolean hasAccounts, Pageable pageable) {
+        Specification<User> specification = Specification.where(null);
+
+        if (!username.isEmpty()) {
+            specification = specification.and(UsersSpecifications.withUsername(username));
+        }
+        if (!firstname.isEmpty()) {
+            specification = specification.and(UsersSpecifications.withFirstname(firstname));
+        }
+        if (!lastname.isEmpty()) {
+            specification = specification.and(UsersSpecifications.withLastname(lastname));
+        }
+        if (!email.isEmpty()) {
+            specification = specification.and(UsersSpecifications.withEmail(email));
+        }
+        if (hasAccounts != null) {
+            specification = specification.and(UsersSpecifications.withHasAccounts(hasAccounts));
+        }
+
+        return findAll(specification, pageable);
+    }
+
+    Page<User> findAll(Specification<User> specification, Pageable pageable);
 
 }

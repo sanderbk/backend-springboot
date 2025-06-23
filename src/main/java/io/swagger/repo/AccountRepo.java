@@ -19,7 +19,22 @@ public interface AccountRepo extends JpaRepository<Account, UUID> {
 
     Account save(Account a);
 
+
+    /**
+     * Finds an account by its IBAN.
+     *
+     * @param iban the IBAN string
+     * @return an Optional of Account if found
+     */
     Optional<Account> findAccountByIban(String iban);
+
+    /**
+     * Checks if an account exists by its IBAN.
+     *
+     * @param iban the IBAN to check
+     * @return true if an account with the given IBAN exists, false otherwise
+     */
+    boolean existsByIban(String iban);
 
     List<Account> findAccountsByUserId(UUID userid);
 
