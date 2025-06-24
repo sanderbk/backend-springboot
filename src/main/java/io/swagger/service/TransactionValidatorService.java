@@ -45,7 +45,7 @@ public class TransactionValidatorService {
         Double transactionLimit = user.getTransLimit();
 
         if (transactionLimit == null) {
-            return true; // unlimited
+            return true;
         }
 
         if (transactionLimit == 0.00) {
@@ -77,5 +77,4 @@ public class TransactionValidatorService {
         Account to = accountService.findAccountByIban(ibanTo).orElseThrow(() -> new NoSuchElementException("To account not found."));
         return from.getActive() && to.getActive();
     }
-
 }

@@ -4,6 +4,7 @@ import io.swagger.model.entity.Account;
 import io.swagger.model.entity.Transaction;
 import io.swagger.model.entity.User;
 import io.swagger.model.enumeration.AccountType;
+import io.swagger.model.enumeration.UserStatus;
 import io.swagger.model.enumeration.UserType;
 import io.swagger.service.AccountService;
 import io.swagger.service.TransactionService;
@@ -29,7 +30,7 @@ public class CustomApplicationRunner implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        
+
         User bank = new User();
         bank.setActive(true);
         bank.setUsername("InhollandBank");
@@ -80,6 +81,7 @@ public class CustomApplicationRunner implements ApplicationRunner {
         frank.setDayLimit(1000.00);
         frank.setTransLimit(200.00);
         frank.setUserTypes(List.of(UserType.ROLE_CUSTOMER));
+        frank.setUserStatus(UserStatus.CLOSED);
 
         // Fixed: Set correct user for Frank's account
         Account franksAccount = new Account();
@@ -118,6 +120,7 @@ public class CustomApplicationRunner implements ApplicationRunner {
         sander.setDayLimit(10000.00);
         sander.setTransLimit(2000.00);
         sander.setUserTypes(List.of(UserType.ROLE_EMPLOYEE));
+        sander.setUserStatus(UserStatus.APPROVED);
 
         Account sandersAccount = new Account();
         sandersAccount.setPincode(1234);

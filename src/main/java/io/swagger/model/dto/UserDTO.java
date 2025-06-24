@@ -1,6 +1,7 @@
 package io.swagger.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.model.enumeration.UserStatus;
 import io.swagger.model.enumeration.UserType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
@@ -28,6 +29,9 @@ public class UserDTO {
     @JsonProperty("userTypes")
     @Valid
     private List<UserType> userTypes = null;
+
+    @JsonProperty("userStatus")
+    private UserStatus userStatus = null;
 
     @JsonProperty("username")
     private String username = null;
@@ -138,6 +142,15 @@ public class UserDTO {
     public UserDTO password(String password) {
         this.password = password;
         return this;
+    }
+
+    @Schema(description = "")
+    public UserStatus getUserStatus() {
+        return userStatus;
+    }
+
+    public void setUserStatus(UserStatus userStatus) {
+        this.userStatus = userStatus;
     }
 
     /**

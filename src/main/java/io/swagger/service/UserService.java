@@ -4,6 +4,7 @@ import io.swagger.api.request.SearchUserRequest;
 import io.swagger.jwt.JwtTokenProvider;
 import io.swagger.model.dto.TokenDTO;
 import io.swagger.model.entity.User;
+import io.swagger.model.enumeration.UserStatus;
 import io.swagger.repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -37,15 +38,30 @@ public class UserService {
     private PasswordEncoder encoder;
 
     public TokenDTO login(String username, String password) {
-
         TokenDTO tokenDto = new TokenDTO();
         try {
-            authManager.authenticate(new UsernamePasswordAuthenticationToken(username, password)); // Check username and password via Spring Boot Security
+            // Step 1: Authenticate credentials
+            authManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+
+            // Step 2: Find user
             User user = this.findByUsername(username);
-            tokenDto.setToken(provider.createToken(username, user.getUserTypes()));
+            if (user == null) {
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid username and/or password");
+            }
+
+            // Step 3: Check user status
+            if (user.getUserStatus() == UserStatus.CLOSED) {
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Your account is closed. Please contact support.");
+            } else if (user.getUserStatus() == UserStatus.PENDING) {
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Your account is pending approval.");
+            }
+
+            // Step 4: Generate token
+            tokenDto.setToken(provider.createToken(username, user.getUserTypes()));  // Token creation supports multiple userTypes
             tokenDto.setUserName(user.getUsername());
             tokenDto.setUserrole(user.getUserTypes());
             tokenDto.setUserId(user.getId());
+
         } catch (AuthenticationException authEx) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid username and/or password");
         }

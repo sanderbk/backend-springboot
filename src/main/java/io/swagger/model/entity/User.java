@@ -1,5 +1,6 @@
 package io.swagger.model.entity;
 
+import io.swagger.model.enumeration.UserStatus;
 import io.swagger.model.enumeration.UserType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,6 +26,10 @@ public class User {
     //Makes sure a User can have multiple UserTypes and fills in a users UserType automatically when getting from the DB
     @ElementCollection(fetch = FetchType.EAGER)
     private List<UserType> userTypes;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private UserStatus userStatus = UserStatus.PENDING;
 
     private String username;
     private String password;

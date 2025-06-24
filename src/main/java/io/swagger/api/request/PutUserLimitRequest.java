@@ -8,4 +8,5 @@ import lombok.Setter;
 public class PutUserLimitRequest {
     private Double dayLimit;
     private Double transLimit;
+    private String userStatus;
 }

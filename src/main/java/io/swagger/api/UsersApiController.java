@@ -6,6 +6,7 @@ import io.swagger.api.request.PutUserLimitRequest;
 import io.swagger.api.request.SearchUserRequest;
 import io.swagger.model.dto.UserDTO;
 import io.swagger.model.entity.User;
+import io.swagger.model.enumeration.UserStatus;
 import io.swagger.service.UserService;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -58,6 +59,9 @@ public class UsersApiController implements UsersApi {
             // Map the UserDTO object from the body to a new User object
             User user = mapper.map(body, User.class);
 
+            if (user.getUserStatus() == null) {
+                user.setUserStatus(UserStatus.PENDING);
+            }
             // Check if a user exist with the given user's username, email or phone number
             userService.doesUserDataExist(user);
 
@@ -82,6 +86,14 @@ public class UsersApiController implements UsersApi {
 
         foundUser.setDayLimit(userLimitRequest.getDayLimit());
         foundUser.setTransLimit(userLimitRequest.getTransLimit());
+
+        if (userLimitRequest.getUserStatus() != null) {
+            try {
+                foundUser.setUserStatus(UserStatus.fromValue(userLimitRequest.getUserStatus()));
+            } catch (IllegalArgumentException ex) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid user status: " + userLimitRequest.getUserStatus());
+            }
+        }
 
         try {
 
